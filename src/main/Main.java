@@ -19,38 +19,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setTitle("Graph Visualizer");
 
-
-        BorderPane layout = new BorderPane();
-        Scene scene = new Scene(layout);
-
-        MenuBar menuBar = new MenuBar();
-
-        // --- Menu File
-        Menu fileMenu = new Menu("File");
-        fileMenu.getItems().add(new MenuItem("Open"));
-
-        Menu viewMenu = new Menu("View");
-        viewMenu.getItems().add(new MenuItem("Zoom in"));
-        viewMenu.getItems().add(new MenuItem("Zoom out"));
-        viewMenu.getItems().add(new MenuItem("Move"));
-        viewMenu.getItems().add(new MenuItem("Expansion/Contraction"));
-        viewMenu.getItems().add(new MenuItem("Color"));
-        viewMenu.getItems().add(new MenuItem("Vertex degree based formatting"));
-
-        Menu editMenu = new Menu("Edit");
-        editMenu.getItems().add(new MenuItem("Select"));
-        editMenu.getItems().add(new MenuItem("Delete or change"));
-        editMenu.getItems().add(new MenuItem("Shortest path"));
-
-        Menu extrasMenu = new Menu("Extras");
-        extrasMenu.getItems().add(new MenuItem("Export"));
-        extrasMenu.getItems().add(new MenuItem("Import"));
-        extrasMenu.getItems().add(new MenuItem("Undo"));
-        extrasMenu.getItems().add(new MenuItem("Redo"));
-
-
-        menuBar.getMenus().addAll(fileMenu, viewMenu, editMenu, extrasMenu);
-        layout.setTop(menuBar);
+        Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
