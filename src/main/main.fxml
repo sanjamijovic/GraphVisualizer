@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Open">
+                        <MenuItem fx:id="openMenu" mnemonicParsing="false" onAction="#open" text="Open">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
                                                     shortcut="DOWN"/>
