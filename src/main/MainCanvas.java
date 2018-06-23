@@ -1,6 +1,5 @@
 package main;
 
-import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 
 public class MainCanvas extends Canvas {

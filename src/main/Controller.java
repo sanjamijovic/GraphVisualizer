@@ -21,17 +21,17 @@ public class Controller implements Initializable{
 
     private Graph graph;
 
-    private final FileChooser fileChooser = new FileChooser();
-    private final FileChooser export = new FileChooser();
+    private final FileChooser openFileChooser = new FileChooser();
+    private final FileChooser exportFileChooser = new FileChooser();
 
     public Controller() {
-        fileChooser.getExtensionFilters().addAll(
+        openFileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("GML", "*.gml"),
                 new FileChooser.ExtensionFilter("CSV Edges", "*.csv"),
                 new FileChooser.ExtensionFilter("CSV Adjacency", "*.csv"),
                 new FileChooser.ExtensionFilter("CSV Matrix", "*.csv")
         );
-        export.getExtensionFilters().addAll(
+        exportFileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("Nas format", ".nas")
         );
@@ -53,17 +53,17 @@ public class Controller implements Initializable{
 
 
     public void open(ActionEvent actionEvent) {
-        File file = fileChooser.showOpenDialog(openMenu.getParentPopup().getScene().getWindow());
+        File file = openFileChooser.showOpenDialog(openMenu.getParentPopup().getScene().getWindow());
         if(file == null) {
             System.out.println("File not found");
         }
         Parser p;
 
-        if(fileChooser.getSelectedExtensionFilter().getDescription().equals("GML")) {
+        if(openFileChooser.getSelectedExtensionFilter().getDescription().equals("GML")) {
             p = new GMLParser();
-        } else if (fileChooser.getSelectedExtensionFilter().getDescription().equals("CSV Edges")){
+        } else if (openFileChooser.getSelectedExtensionFilter().getDescription().equals("CSV Edges")){
             p = new CSVEdges();
-        } else if(fileChooser.getSelectedExtensionFilter().getDescription().equals("CSV Adjacency")) {
+        } else if(openFileChooser.getSelectedExtensionFilter().getDescription().equals("CSV Adjacency")) {
             p = new CSVAdjacency();
         } else {
             p = new CSVMatrix();
@@ -107,12 +107,24 @@ public class Controller implements Initializable{
     }
 
     public void export() {
-        File file = export.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
+        File file = exportFileChooser.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
+        if(file != null) {
+            if (exportFileChooser.getSelectedExtensionFilter().getDescription() == "PNG")
+                pngExport(file);
+            else {
+                // TODO: napraviti za svoj format
+            }
+        }
+    }
+
+    public void pngExport(File file) {
         WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
-        } catch (IOException e) {
-            // TODO: handle exception here
+        if(file != null) {
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+            } catch (IOException e) {
+                // TODO: handle exception here
+            }
         }
     }
 }
