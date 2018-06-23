@@ -4,7 +4,6 @@ import javafx.scene.canvas.Canvas;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class Graph implements Cloneable {
     private HashSet<Edge> edges;
@@ -84,5 +83,24 @@ public class Graph implements Cloneable {
             v.setY((v.getY() - y) / ZOOM_SCALE + y);
             v.setRadius(v.getRadius() / ZOOM_SCALE);
         }
+    }
+
+    public GraphicElement getElement(double x, double y) {
+        for(Vertex v : vertices.values())
+            if(v.hasInside(x, y))
+                return v;
+        for(Edge e : edges)
+            if(e.hasInside(x, y))
+                return e;
+        return null;
+    }
+
+    public void deleteElement(GraphicElement e) {
+        if(e instanceof Vertex) {
+            vertices.remove(((Vertex) e).getId());
+            edges.removeIf(edge -> edge.getSource().equals(e) || edge.getTarget().equals(e));
+        }
+        else
+            edges.remove(e);
     }
 }

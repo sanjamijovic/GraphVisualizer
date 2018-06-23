@@ -4,6 +4,8 @@ package main;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+import java.text.DecimalFormat;
+
 public class Vertex extends GraphicElement{
     private String id, label;
     private double x, y, radius;
@@ -57,5 +59,28 @@ public class Vertex extends GraphicElement{
         GraphicsContext graphics = canvas.getGraphicsContext2D();
         graphics.setFill(color);
         graphics.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+    }
+
+    public boolean hasInside(double x, double y) {
+        return x >= this.x - radius && x <= this.x + radius && y >= this.y - radius && y <= this.y + radius;
+    }
+
+    @Override
+    public String toString() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return "[Vertex] id: " + id + "\nx: " + df.format(x) + "\ny: " + df.format(y);
+    }
+
+    public static double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this)
+            return true;
+        if(!(obj instanceof Vertex))
+            return false;
+        return ((Vertex) obj).getId().equals(id);
     }
 }

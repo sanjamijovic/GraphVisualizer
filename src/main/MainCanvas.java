@@ -1,9 +1,14 @@
 package main;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
+
 
 public class MainCanvas extends Canvas {
     private Graph graph;
+    private TextArea selectedItem;
+    private GraphicElement selectedElement;
 
     public MainCanvas() {
         widthProperty().addListener(e->repaint());
@@ -16,6 +21,28 @@ public class MainCanvas extends Canvas {
                     graph.zoomOut(e.getX(), e.getY());
                 repaint();
             }
+        });
+
+        setOnMousePressed(e -> {
+            if(graph == null)
+                return;
+            selectedElement = graph.getElement(e.getX(), e.getY());
+            if(selectedElement != null) {
+                selectedElement.setColor(Color.PINK);
+                selectedItem.setText(selectedElement.toString());
+                repaint();
+            }
+        });
+
+        setOnMouseDragged(e -> {
+            if(graph == null || selectedElement == null)
+                return;
+            if(selectedElement instanceof Vertex) {
+                ((Vertex)selectedElement).setX(e.getX());
+                ((Vertex)selectedElement).setY(e.getY());
+                repaint();
+            }
+
         });
     }
 
@@ -59,5 +86,13 @@ public class MainCanvas extends Canvas {
             v.setX(x);
             v.setY(y);
         }
+    }
+
+    public void setSelectedItem(TextArea selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+
+    public GraphicElement getSelectedElement() {
+        return selectedElement;
     }
 }

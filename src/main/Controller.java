@@ -5,10 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -22,7 +19,24 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable{
 
     private Graph graph;
-    private Thread graphAlgorithmThread = null;
+    private Thread graphAlgorithmThread = null;@FXML
+    private MenuItem openMenu;
+    @FXML
+    private MenuItem exportMenu;
+    @FXML
+    private MainCanvas canvas;
+    @FXML
+    private Pane canvasPane;
+    @FXML
+    private Label numNodes;
+    @FXML
+    private Label numEdges;
+    @FXML
+    private ComboBox algorithmChooser;
+    @FXML
+    private TextField scale;
+    @FXML
+    private TextArea selectedItem;
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
@@ -39,25 +53,6 @@ public class Controller implements Initializable{
                 new FileChooser.ExtensionFilter("Nas format", ".nas")
         );
     }
-
-
-    @FXML
-    private MenuItem openMenu;
-    @FXML
-    private MenuItem exportMenu;
-    @FXML
-    private MainCanvas canvas;
-    @FXML
-    private Pane canvasPane;
-    @FXML
-    private Label numNodes;
-    @FXML
-    private Label numEdges;
-    @FXML
-    private ComboBox algorithmChooser;
-    @FXML
-    private TextField scale;
-
 
     public void open(ActionEvent actionEvent) {
         File file = openFileChooser.showOpenDialog(openMenu.getParentPopup().getScene().getWindow());
@@ -88,7 +83,7 @@ public class Controller implements Initializable{
         numNodes.setText(Integer.toString(graph.numOfVertices()));
         numEdges.setText(Integer.toString(graph.numOfEdges()));
         canvas.setGraph(graph);
-        paint();
+        canvas.repaint();
 
 
     }
@@ -97,6 +92,8 @@ public class Controller implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         canvas.widthProperty().bind(canvasPane.widthProperty());
         canvas.heightProperty().bind(canvasPane.heightProperty());
+        canvas.setSelectedItem(selectedItem);
+        selectedItem.setEditable(false);
     }
 
     private void paint() {
@@ -162,5 +159,13 @@ public class Controller implements Initializable{
             return;
         graphAlgorithmThread = new ExpansionContractionThread(graph, scale, canvas);
         graphAlgorithmThread.start();
+    }
+
+    public void delete() {
+        GraphicElement element = canvas.getSelectedElement();
+        if(element != null) {
+            graph.deleteElement(element);
+            canvas.repaint();
+        }
     }
 }
