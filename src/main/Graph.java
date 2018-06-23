@@ -7,8 +7,9 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Graph implements Cloneable {
-    HashSet<Edge> edges;
-    HashMap<String, Vertex> vertices;
+    private HashSet<Edge> edges;
+    private HashMap<String, Vertex> vertices;
+    private final static double ZOOM_SCALE = 1.2;
 
     public Graph() {
         edges = new HashSet<>();
@@ -71,15 +72,17 @@ public class Graph implements Cloneable {
 
     public void zoomIn(double x, double y) {
         for(Vertex v : vertices.values()) {
-            v.setX((v.getX() - x) * 2 + x);
-            v.setY((v.getY() - y) * 2 + y);
+            v.setX((v.getX() - x) * ZOOM_SCALE + x);
+            v.setY((v.getY() - y) * ZOOM_SCALE + y);
+            v.setRadius(v.getRadius() * ZOOM_SCALE);
         }
     }
 
     public void zoomOut(double x, double y) {
         for(Vertex v : vertices.values()) {
-            v.setX((v.getX()) / 2 + x / 2);
-            v.setY((v.getY()) / 2 + y / 2);
+            v.setX((v.getX()) / ZOOM_SCALE + x / ZOOM_SCALE);
+            v.setY((v.getY()) / ZOOM_SCALE + y / ZOOM_SCALE);
+            v.setRadius(v.getRadius() / ZOOM_SCALE);
         }
     }
 }
