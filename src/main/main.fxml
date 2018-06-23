@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import main.MainCanvas?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <menus>
@@ -16,21 +20,18 @@
                     <items>
                         <MenuItem fx:id="openMenu" mnemonicParsing="false" onAction="#open" text="Open">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <SeparatorMenuItem/>
+                        <SeparatorMenuItem />
                         <MenuItem mnemonicParsing="false" text="Import">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" text="Export">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
                     </items>
@@ -39,49 +40,65 @@
                     <items>
                         <MenuItem mnemonicParsing="false" text="Undo">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" text="Redo">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="Y" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="Y" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <SeparatorMenuItem/>
-                        <MenuItem mnemonicParsing="false" text="Select"/>
-                        <MenuItem mnemonicParsing="false" text="Delete or change"/>
-                        <MenuItem mnemonicParsing="false" text="Shortest path"/>
+                        <SeparatorMenuItem />
+                        <MenuItem mnemonicParsing="false" text="Select" />
+                        <MenuItem mnemonicParsing="false" text="Delete or change" />
+                        <MenuItem mnemonicParsing="false" text="Shortest path" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="View">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Zoom in">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="PLUS" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="PLUS" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
                         <MenuItem mnemonicParsing="false" text="Zoom out">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="MINUS" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="MINUS" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <SeparatorMenuItem/>
-                        <MenuItem mnemonicParsing="false" text="Move"/>
-                        <MenuItem mnemonicParsing="false" text="Expansion/Contraction"/>
-                        <MenuItem mnemonicParsing="false" text="Color"/>
-                        <MenuItem mnemonicParsing="false" text="Vertex degree based formatting"/>
+                        <SeparatorMenuItem />
+                        <MenuItem mnemonicParsing="false" text="Move" />
+                        <MenuItem mnemonicParsing="false" text="Expansion/Contraction" />
+                        <MenuItem mnemonicParsing="false" text="Color" />
+                        <MenuItem mnemonicParsing="false" text="Vertex degree based formatting" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About"/>
+                        <MenuItem mnemonicParsing="false" text="About" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
     </top>
+    <center>
+        <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
+            <MainCanvas fx:id="canvas" />
+        </Pane>
+    </center>
+    <right>
+        <SplitPane dividerPositions="0.3089430894308943" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane minHeight="100.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Number of Nodes:" />
+                        <Label fx:id="numNodes" layoutX="14.0" layoutY="31.0" text="0" />
+                        <Label layoutX="14.0" layoutY="58.0" text="Number of Edges:" />
+                        <Label fx:id="numEdges" layoutX="14.0" layoutY="75.0" text="0" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+            </items>
+        </SplitPane>
+    </right>
 </BorderPane>

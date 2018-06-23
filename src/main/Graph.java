@@ -1,10 +1,10 @@
 package main;
 
-import javafx.util.Pair;
+import javafx.scene.canvas.Canvas;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 public class Graph implements Cloneable {
     HashSet<Edge> edges;
@@ -35,6 +35,14 @@ public class Graph implements Cloneable {
         return vertices.get(id);
     }
 
+    public HashMap<String, Vertex> getVertices() {
+        return vertices;
+    }
+
+    public HashSet<Edge> getEdges() {
+        return edges;
+    }
+
     public int numOfVertices() {
         return vertices.size();
     }
@@ -52,5 +60,12 @@ public class Graph implements Cloneable {
             g.edges.add(new Edge(g.vertices.get(e.getSource().getId()), g.vertices.get(e.getTarget().getId())));
         }
         return  g;
+    }
+
+    public void paint(Canvas c) {
+        for(Edge e : edges)
+            e.paint(c);
+        for (Vertex v : vertices.values())
+            v.paint(c);
     }
 }

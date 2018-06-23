@@ -1,6 +1,10 @@
 package main;
 
-public class Edge {
+
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+
+public class Edge extends GraphicElement {
     private Vertex source;
     private Vertex target;
     private String label;
@@ -26,5 +30,12 @@ public class Edge {
 
     public String getLabel() {
         return label;
+    }
+
+    @Override
+    public void paint(Canvas canvas) {
+        GraphicsContext graphics = canvas.getGraphicsContext2D();
+        graphics.setFill(color);
+        graphics.strokeLine(source.getX(), source.getY(), target.getX(), target.getY());
     }
 }
