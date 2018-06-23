@@ -64,10 +64,10 @@ public class Graph implements Cloneable {
     }
 
     public void paint(Canvas c) {
-        for(Edge e : edges)
-            e.paint(c);
         for (Vertex v : vertices.values())
             v.paint(c);
+        for(Edge e : edges)
+            e.paint(c);
     }
 
     public void zoomIn(double x, double y) {

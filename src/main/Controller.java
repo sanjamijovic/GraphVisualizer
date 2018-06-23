@@ -5,8 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -20,6 +22,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable{
 
     private Graph graph;
+    private Thread graphAlgorithmThread = null;
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
@@ -50,6 +53,10 @@ public class Controller implements Initializable{
     private Label numNodes;
     @FXML
     private Label numEdges;
+    @FXML
+    private ComboBox algorithmChooser;
+    @FXML
+    private TextField scale;
 
 
     public void open(ActionEvent actionEvent) {
@@ -126,5 +133,34 @@ public class Controller implements Initializable{
                 // TODO: handle exception here
             }
         }
+    }
+
+    public void startThread() {
+        if(algorithmChooser.getValue() == null)
+            return;
+
+        String algorithm = algorithmChooser.getValue().toString();
+        if(algorithm.equals("Expansion/Contraction")) {
+            try {
+                startExpansionContraction(Double.parseDouble(scale.getText()));
+            } catch (NumberFormatException e) {}
+        } else {
+            // TODO: force atlas
+        }
+
+    }
+
+    public void stopThread() {
+        if(graphAlgorithmThread != null)
+            graphAlgorithmThread.interrupt();
+    }
+
+    public void startExpansionContraction(double scale) {
+        if(graphAlgorithmThread != null)
+            graphAlgorithmThread.interrupt();
+        if(graph == null)
+            return;
+        graphAlgorithmThread = new ExpansionContractionThread(graph, scale, canvas);
+        graphAlgorithmThread.start();
     }
 }
