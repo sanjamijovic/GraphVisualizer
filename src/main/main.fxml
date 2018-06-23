@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import main.MainCanvas?>
 
+<?import javafx.scene.layout.StackPane?>
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -56,12 +57,12 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="View">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Zoom in">
+                        <MenuItem mnemonicParsing="false" text="Zoom in" onAction="#zoomIn">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="PLUS" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" text="Zoom out">
+                        <MenuItem mnemonicParsing="false" text="Zoom out" onAction="#zoomOut">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="MINUS" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
@@ -82,8 +83,8 @@
         </MenuBar>
     </top>
     <center>
-        <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
-            <MainCanvas fx:id="canvas" />
+        <Pane fx:id="canvasPane" BorderPane.alignment="CENTER" style="-fx-background-color: pink;">
+            <MainCanvas fx:id="canvas"/>
         </Pane>
     </center>
     <right>

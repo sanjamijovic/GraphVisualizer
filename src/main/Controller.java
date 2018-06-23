@@ -3,7 +3,8 @@ package main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
@@ -82,5 +83,15 @@ public class Controller implements Initializable{
 
     private void paint() {
         graph.paint(canvas);
+    }
+
+    public void zoomIn() {
+        graph.zoomIn(canvas.getWidth() / 2, canvas.getHeight() / 2);
+        canvas.repaint();
+    }
+
+    public void zoomOut() {
+        graph.zoomOut(canvas.getWidth() / 2, canvas.getHeight() / 2);
+        canvas.repaint();
     }
 }

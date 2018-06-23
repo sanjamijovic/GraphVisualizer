@@ -68,4 +68,18 @@ public class Graph implements Cloneable {
         for (Vertex v : vertices.values())
             v.paint(c);
     }
+
+    public void zoomIn(double x, double y) {
+        for(Vertex v : vertices.values()) {
+            v.setX((v.getX() - x) * 2 + x);
+            v.setY((v.getY() - y) * 2 + y);
+        }
+    }
+
+    public void zoomOut(double x, double y) {
+        for(Vertex v : vertices.values()) {
+            v.setX((v.getX()) / 2 + x / 2);
+            v.setY((v.getY()) / 2 + y / 2);
+        }
+    }
 }

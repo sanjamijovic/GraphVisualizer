@@ -1,5 +1,6 @@
 package main;
 
+import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 
 public class MainCanvas extends Canvas {
@@ -8,6 +9,15 @@ public class MainCanvas extends Canvas {
     public MainCanvas() {
         widthProperty().addListener(e->repaint());
         heightProperty().addListener(e->repaint());
+        setOnScroll(e -> {
+            if(graph != null) {
+                if(e.getDeltaY() > 0)
+                    graph.zoomIn(e.getX(), e.getY());
+                else
+                    graph.zoomOut(e.getX(), e.getY());
+                repaint();
+            }
+        });
     }
 
     public void paint() {
