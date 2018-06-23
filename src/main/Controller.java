@@ -1,13 +1,17 @@
 package main;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +22,7 @@ public class Controller implements Initializable{
     private Graph graph;
 
     private final FileChooser fileChooser = new FileChooser();
+    private final FileChooser export = new FileChooser();
 
     public Controller() {
         fileChooser.getExtensionFilters().addAll(
@@ -26,11 +31,17 @@ public class Controller implements Initializable{
                 new FileChooser.ExtensionFilter("CSV Adjacency", "*.csv"),
                 new FileChooser.ExtensionFilter("CSV Matrix", "*.csv")
         );
+        export.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("Nas format", ".nas")
+        );
     }
 
 
     @FXML
     private MenuItem openMenu;
+    @FXML
+    private MenuItem exportMenu;
     @FXML
     private MainCanvas canvas;
     @FXML
@@ -93,5 +104,15 @@ public class Controller implements Initializable{
     public void zoomOut() {
         graph.zoomOut(canvas.getWidth() / 2, canvas.getHeight() / 2);
         canvas.repaint();
+    }
+
+    public void export() {
+        File file = export.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
+        WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException e) {
+            // TODO: handle exception here
+        }
     }
 }

@@ -30,7 +30,7 @@
                                 <KeyCodeCombination alt="UP" code="I" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" text="Export">
+                        <MenuItem fx:id="exportMenu" mnemonicParsing="false" text="Export" onAction="#export">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
@@ -83,7 +83,7 @@
         </MenuBar>
     </top>
     <center>
-        <Pane fx:id="canvasPane" BorderPane.alignment="CENTER" style="-fx-background-color: pink;">
+        <Pane fx:id="canvasPane" BorderPane.alignment="CENTER">
             <MainCanvas fx:id="canvas"/>
         </Pane>
     </center>
