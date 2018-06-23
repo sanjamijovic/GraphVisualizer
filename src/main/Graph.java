@@ -80,8 +80,8 @@ public class Graph implements Cloneable {
 
     public void zoomOut(double x, double y) {
         for(Vertex v : vertices.values()) {
-            v.setX((v.getX()) / ZOOM_SCALE + x / ZOOM_SCALE);
-            v.setY((v.getY()) / ZOOM_SCALE + y / ZOOM_SCALE);
+            v.setX((v.getX() - x) / ZOOM_SCALE + x);
+            v.setY((v.getY() - y) / ZOOM_SCALE + y);
             v.setRadius(v.getRadius() / ZOOM_SCALE);
         }
     }
