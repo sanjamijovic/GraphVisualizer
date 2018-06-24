@@ -4,12 +4,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextArea;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 
 
 public class MainCanvas extends Canvas {
     private Graph graph;
     private TextArea selectedItem;
-    private HashSet<GraphicElement> selectedElements = new HashSet<>();
+    private LinkedList<GraphicElement> selectedElements = new LinkedList<>();
     private double oldMouseX, oldMouseY;
 
     public MainCanvas() {
@@ -36,15 +37,11 @@ public class MainCanvas extends Canvas {
             if(selectedElement != null && selectedElements.contains(selectedElement)) {
                 return;
             } else if (selectedElement != null) {
-                selectedElements.add(selectedElement);
-                selectedElement.setSelected(true);
+                selectElement(selectedElement);
                 selectedItem.appendText(selectedElement.toString());
 
             } else {
-                for(GraphicElement element : selectedElements)
-                    element.setSelected(false);
-                selectedItem.setText("");
-                selectedElements.clear();
+                deselectAll();
 
             }
             repaint();
@@ -53,7 +50,6 @@ public class MainCanvas extends Canvas {
         setOnMouseDragged(e -> {
             if(graph == null || selectedElements.size() == 0)
                 return;
-
             double dx = e.getX() - oldMouseX;
             double dy = e.getY() - oldMouseY;
 
@@ -118,7 +114,32 @@ public class MainCanvas extends Canvas {
         this.selectedItem = selectedItem;
     }
 
-    public HashSet<GraphicElement> getSelectedElements() {
+    public LinkedList<GraphicElement> getSelectedElements() {
         return selectedElements;
+    }
+
+    public void selectElement(GraphicElement element) {
+        selectedElements.add(element);
+        element.setSelected(true);
+    }
+
+    public void selectAll() {
+        if(graph == null)
+            return;
+        if(selectedElements.size() != 0)
+            selectedElements.clear();
+        for(Vertex v : graph.getVertices().values())
+            selectElement(v);
+        for(Edge e : graph.getEdges())
+            selectElement(e);
+        selectedItem.setText("Whole graph selected");
+        repaint();
+    }
+
+    public void deselectAll() {
+        for(GraphicElement element : selectedElements)
+            element.setSelected(false);
+        selectedItem.setText("");
+        selectedElements.clear();
     }
 }

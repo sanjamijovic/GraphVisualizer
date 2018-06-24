@@ -14,8 +14,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable{
 
@@ -42,6 +41,8 @@ public class Controller implements Initializable{
     private ColorPicker colorPicker;
     @FXML
     private ComboBox sizeChooser;
+    @FXML
+    private TextArea path;
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
@@ -85,8 +86,7 @@ public class Controller implements Initializable{
 
         System.out.println("Validan fajl");
         System.out.println("Cvorova: " + graph.numOfVertices() + " grana: " + graph.numOfEdges());
-        numNodes.setText(Integer.toString(graph.numOfVertices()));
-        numEdges.setText(Integer.toString(graph.numOfEdges()));
+        updateNumbers();
         canvas.setGraph(graph);
         canvas.repaint();
 
@@ -167,13 +167,14 @@ public class Controller implements Initializable{
     }
 
     public void delete() {
-        HashSet<GraphicElement> elements = canvas.getSelectedElements();
+        LinkedList<GraphicElement> elements = canvas.getSelectedElements();
         for(GraphicElement element : elements) {
             if (element != null) {
                 graph.deleteElement(element);
                 canvas.repaint();
             }
         }
+        updateNumbers();
     }
 
     public void changeColor() {
@@ -207,6 +208,33 @@ public class Controller implements Initializable{
     }
 
     public void shortestPath() {
-        System.out.println("shortest path");
+        if(canvas.getSelectedElements().size() != 2) {
+            path.setText("Nevalidan broj cvorova.");
+            return;
+        }
+
+        Vertex source = (Vertex) canvas.getSelectedElements().get(0);
+        Vertex target = (Vertex) canvas.getSelectedElements().get(1);
+        LinkedList<Vertex> nodes = graph.shortestPath(source, target);
+
+        if(nodes == null) {
+            path.setText("Nedostizni");
+            return;
+        }
+
+        path.setText("Shortest path: " + nodes.size() + "\n");
+        for(Vertex v : nodes) {
+            path.appendText(v.getId());
+            path.appendText("\n");
+        }
+    }
+
+    public void selectAll() {
+        canvas.selectAll();
+    }
+
+    private void updateNumbers() {
+        numNodes.setText(Integer.toString(graph.numOfVertices()));
+        numEdges.setText(Integer.toString(graph.numOfEdges()));
     }
 }

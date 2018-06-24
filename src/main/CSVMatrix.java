@@ -23,15 +23,12 @@ public class CSVMatrix implements Parser {
         try {
             int i = 1;
             while ((line = br.readLine()) != null) {
-                System.out.println("line");
                 String[] tokens = line.split(";");
                 if(tokens.length != nodeLabels.length || !tokens[0].equals(nodeLabels[i]))
                     throw new IllegalFileException("Illegal file format");
                 for(int j = 1; j < tokens.length; j++) {
                     if(tokens[j].equals("1")) {
                         g.addEdge(new Edge(g.getVertex(nodeLabels[i]), g.getVertex(nodeLabels[j])));
-                        System.out.println("edge");
-                        System.out.println(nodeLabels[i] + nodeLabels[j]);
                     }
                     else if(!tokens[j].equals("0"))
                         throw new IllegalFileException("Illegal file exception");

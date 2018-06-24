@@ -2,8 +2,7 @@ package main;
 
 import javafx.scene.canvas.Canvas;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Graph implements Cloneable {
     private HashSet<Edge> edges;
@@ -102,5 +101,64 @@ public class Graph implements Cloneable {
         }
         else
             edges.remove(e);
+    }
+
+    public LinkedList<Vertex> shortestPath(Vertex source, Vertex target) {
+
+        System.out.println(source + " " + target);
+
+        HashMap<Vertex, Vertex> predecessors = new HashMap<>();
+        LinkedList<Vertex> vertexQueue = new LinkedList<>();
+        HashSet<Vertex> visited = new HashSet<>();
+
+        for(Vertex vertex : vertices.values()) {
+            predecessors.put(vertex, null);
+        }
+
+        visited.add(source);
+        vertexQueue.add(source);
+
+        while (!vertexQueue.isEmpty()) {
+            Vertex vertex = vertexQueue.removeFirst();
+
+            for(Vertex other : nextVertices(vertex)) {
+                if(!visited.contains(other)) {
+                    visited.add(other);
+                    vertexQueue.add(other);
+                    predecessors.put(other, vertex);
+                    if(other == target)
+                        return calculatePath(source, target, predecessors);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private LinkedList<Vertex> calculatePath(Vertex source, Vertex target, HashMap<Vertex, Vertex> predecessors) {
+        Vertex current = target;
+        LinkedList<Vertex> nodesInPath = new LinkedList<>();
+
+        while (current != source) {
+            if(current == null)
+                return null;
+            nodesInPath.addFirst(current);
+            current = predecessors.get(current);
+        }
+
+        nodesInPath.addFirst(current);
+        return nodesInPath;
+    }
+
+    private LinkedList<Vertex> nextVertices(Vertex v) {
+        LinkedList<Vertex> nextVertices = new LinkedList<>();
+        for(Edge edge : edges) {
+            if(edge.getSource() == v)
+                nextVertices.add(edge.getTarget());
+            else if(edge.getTarget() == v)
+                nextVertices.add(edge.getSource());
+        }
+
+        return nextVertices;
     }
 }
