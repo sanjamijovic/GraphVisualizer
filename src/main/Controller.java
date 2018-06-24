@@ -43,6 +43,10 @@ public class Controller implements Initializable{
     private ComboBox sizeChooser;
     @FXML
     private TextArea path;
+    @FXML
+    private CheckMenuItem checkLabels;
+    @FXML
+    private ComboBox changeType;
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
@@ -56,7 +60,7 @@ public class Controller implements Initializable{
         );
         exportFileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("Nas format", ".nas")
+                new FileChooser.ExtensionFilter("XML", "*.xml")
         );
     }
 
@@ -116,12 +120,15 @@ public class Controller implements Initializable{
     }
 
     public void export() {
+        if(graph == null)
+            return;
         File file = exportFileChooser.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
         if(file != null) {
             if (exportFileChooser.getSelectedExtensionFilter().getDescription() == "PNG")
                 pngExport(file);
             else {
-                // TODO: napraviti za svoj format
+                Exporter exporter = new Exporter(graph, file);
+                exporter.makeFile();
             }
         }
     }
@@ -177,31 +184,62 @@ public class Controller implements Initializable{
         updateNumbers();
     }
 
-    public void changeColor() {
-        if(graph == null)
-            return;
+    public void change() {
+        if(colorPicker.getValue() != null)
+            changeColor();
+        if(sizeChooser.getValue() != null)
+            changeSize();
+    }
 
-        for(GraphicElement element : canvas.getSelectedElements())
-            element.setColor(colorPicker.getValue());
+    public void changeColor() {
+        if(graph == null || changeType.getValue() == null)
+            return;
+        for(GraphicElement element : canvas.getSelectedElements()) {
+            if (changeType.getValue().toString().equals("Element")) {
+                element.setColor(colorPicker.getValue());
+            }
+            else if(element instanceof Vertex) {
+                ((Vertex) element).setFontColor(colorPicker.getValue());
+            }
+        }
         canvas.repaint();
     }
 
     public void changeSize() {
-        if(graph == null || sizeChooser.getValue() == null)
+        if(graph == null || changeType.getValue() == null)
             return;
 
+        String sizePercentage = sizeChooser.getValue().toString();
+        double alpha;
+
+        switch (sizePercentage) {
+            case "50%":
+                alpha = 0.5;
+                break;
+            case "75%":
+                alpha = 0.75;
+                break;
+            case "125%":
+                alpha = 1.25;
+                break;
+            case "150%":
+                alpha = 1.5;
+                break;
+            case "200%":
+                alpha = 2;
+                break;
+                default:
+                    alpha = 1;
+                    break;
+        }
+
         for(GraphicElement element : canvas.getSelectedElements()) {
-            if(element instanceof Vertex) {
-                String sizePercentage = sizeChooser.getValue().toString();
-                double alpha = 1;
-                switch (sizePercentage) {
-                    case "50%" : alpha = 0.5; break;
-                    case "75%" : alpha = 0.75; break;
-                    case "125%" : alpha = 1.25; break;
-                    case "150%" : alpha = 1.5; break;
-                    case "200%" : alpha = 2; break;
+            if (element instanceof Vertex) {
+                if (changeType.getValue().toString().equals("Element")) {
+                    ((Vertex) element).setRadius(((Vertex) element).getRadius() * alpha);
+                } else {
+                    ((Vertex) element).setFontSize(((Vertex) element).getFontSize() * alpha);
                 }
-                ((Vertex) element).setRadius(((Vertex) element).getRadius() * alpha);
             }
         }
         canvas.repaint();
@@ -236,5 +274,11 @@ public class Controller implements Initializable{
     private void updateNumbers() {
         numNodes.setText(Integer.toString(graph.numOfVertices()));
         numEdges.setText(Integer.toString(graph.numOfEdges()));
+    }
+
+    public void  showLabels() {
+        boolean checked = checkLabels.isSelected();
+        graph.showLabels(checked);
+        canvas.repaint();
     }
 }

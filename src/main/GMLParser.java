@@ -32,11 +32,9 @@ public class GMLParser implements Parser {
                 }
                 if(nodeMatcher.groupCount() == 2) {
                     g.addVertex(new Vertex(nodeMatcher.group(1)));
-                    System.out.println("node" + nodeMatcher.group(1));
                 }
                 else {
                     g.addVertex(new Vertex(nodeMatcher.group(1), nodeMatcher.group(2)));
-                    System.out.println("node" + nodeMatcher.group(1) + nodeMatcher.group(2));
                 }
 
             } else {
@@ -49,11 +47,9 @@ public class GMLParser implements Parser {
                 }
                 if(edgeMatcher.groupCount() == 3) {
                     g.addEdge(new Edge(g.getVertex(edgeMatcher.group(1)), g.getVertex(edgeMatcher.group(2))));
-                    System.out.println("edge" + edgeMatcher.group(1) + edgeMatcher.group(2));
                 }
                 else {
                     g.addEdge(new Edge(g.getVertex(edgeMatcher.group(1)), g.getVertex(edgeMatcher.group(2)), edgeMatcher.group(3)));
-                    System.out.println("edge" + edgeMatcher.group(1) + edgeMatcher.group(2) + edgeMatcher.group(3));
                 }
 
             }

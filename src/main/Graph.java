@@ -73,6 +73,7 @@ public class Graph implements Cloneable {
             v.setX((v.getX() - x) * ZOOM_SCALE + x);
             v.setY((v.getY() - y) * ZOOM_SCALE + y);
             v.setRadius(v.getRadius() * ZOOM_SCALE);
+            v.setFontSize(v.getFontSize() * ZOOM_SCALE);
         }
     }
 
@@ -81,6 +82,7 @@ public class Graph implements Cloneable {
             v.setX((v.getX() - x) / ZOOM_SCALE + x);
             v.setY((v.getY() - y) / ZOOM_SCALE + y);
             v.setRadius(v.getRadius() / ZOOM_SCALE);
+            v.setFontSize(v.getFontSize() / ZOOM_SCALE);
         }
     }
 
@@ -160,5 +162,10 @@ public class Graph implements Cloneable {
         }
 
         return nextVertices;
+    }
+
+    public void showLabels(boolean labels) {
+        for(Vertex v : vertices.values())
+            v.setShowLabels(labels);
     }
 }
