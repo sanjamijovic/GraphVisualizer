@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable{
@@ -162,10 +163,12 @@ public class Controller implements Initializable{
     }
 
     public void delete() {
-        GraphicElement element = canvas.getSelectedElement();
-        if(element != null) {
-            graph.deleteElement(element);
-            canvas.repaint();
+        HashSet<GraphicElement> elements = canvas.getSelectedElements();
+        for(GraphicElement element : elements) {
+            if (element != null) {
+                graph.deleteElement(element);
+                canvas.repaint();
+            }
         }
     }
 }

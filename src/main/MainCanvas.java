@@ -2,13 +2,15 @@ package main;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextArea;
-import javafx.scene.paint.Color;
+
+import java.util.HashSet;
 
 
 public class MainCanvas extends Canvas {
     private Graph graph;
     private TextArea selectedItem;
-    private GraphicElement selectedElement;
+    private HashSet<GraphicElement> selectedElements = new HashSet<>();
+    private double oldMouseX, oldMouseY;
 
     public MainCanvas() {
         widthProperty().addListener(e->repaint());
@@ -24,24 +26,45 @@ public class MainCanvas extends Canvas {
         });
 
         setOnMousePressed(e -> {
+            oldMouseX = e.getX();
+            oldMouseY = e.getY();
+
             if(graph == null)
                 return;
-            selectedElement = graph.getElement(e.getX(), e.getY());
+            GraphicElement selectedElement = graph.getElement(e.getX(), e.getY());
             if(selectedElement != null) {
-                selectedElement.setColor(Color.PINK);
-                selectedItem.setText(selectedElement.toString());
+                selectedElements.add(selectedElement);
+                selectedElement.setSelected(true);
+                selectedItem.appendText(selectedElement.toString());
+                repaint();
+            }
+            else {
+                for(GraphicElement element : selectedElements)
+                    element.setSelected(false);
+                selectedItem.setText("");
+                selectedElements.clear();
                 repaint();
             }
         });
 
         setOnMouseDragged(e -> {
-            if(graph == null || selectedElement == null)
+            if(graph == null || selectedElements.size() == 0)
                 return;
-            if(selectedElement instanceof Vertex) {
-                ((Vertex)selectedElement).setX(e.getX());
-                ((Vertex)selectedElement).setY(e.getY());
-                repaint();
+
+            double dx = e.getX() - oldMouseX;
+            double dy = e.getY() - oldMouseY;
+
+            for(GraphicElement element : selectedElements) {
+                if (element instanceof Vertex) {
+                    ((Vertex) element).setX(((Vertex) element).getX() + dx);
+                    ((Vertex) element).setY(((Vertex) element).getY() + dy);
+                }
             }
+
+            oldMouseX = e.getX();
+            oldMouseY = e.getY();
+
+            repaint();
 
         });
     }
@@ -92,7 +115,7 @@ public class MainCanvas extends Canvas {
         this.selectedItem = selectedItem;
     }
 
-    public GraphicElement getSelectedElement() {
-        return selectedElement;
+    public HashSet<GraphicElement> getSelectedElements() {
+        return selectedElements;
     }
 }

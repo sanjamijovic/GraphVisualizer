@@ -68,7 +68,7 @@ public class Vertex extends GraphicElement{
     @Override
     public String toString() {
         DecimalFormat df = new DecimalFormat("#.##");
-        return "[Vertex] id: " + id + "\nx: " + df.format(x) + "\ny: " + df.format(y);
+        return "[Vertex] id: " + id + "\nx: " + df.format(x) + "\ny: " + df.format(y) + "\n";
     }
 
     public static double distance(double x1, double y1, double x2, double y2) {

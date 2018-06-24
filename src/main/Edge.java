@@ -63,6 +63,6 @@ public class Edge extends GraphicElement {
 
     @Override
     public String toString() {
-        return "[Edge] source: " + source + " target: " + target;
+        return "[Edge] source: " + source + " target: " + target + "\n";
     }
 }
