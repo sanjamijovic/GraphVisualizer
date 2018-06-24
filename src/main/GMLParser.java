@@ -45,11 +45,15 @@ public class GMLParser implements Parser {
                 if(!edgeMatcher.find()) {
                     throw new IllegalFileException("Illegal edge format");
                 }
+                Vertex source = g.getVertex(edgeMatcher.group(1));
+                Vertex target = g.getVertex(edgeMatcher.group(2));
+                if(source == null || target == null)
+                    throw new IllegalFileException("Edge for non existent node");
                 if(edgeMatcher.groupCount() == 3) {
-                    g.addEdge(new Edge(g.getVertex(edgeMatcher.group(1)), g.getVertex(edgeMatcher.group(2))));
+                    g.addEdge(new Edge(source, target));
                 }
                 else {
-                    g.addEdge(new Edge(g.getVertex(edgeMatcher.group(1)), g.getVertex(edgeMatcher.group(2)), edgeMatcher.group(3)));
+                    g.addEdge(new Edge(source, target, edgeMatcher.group(3)));
                 }
 
             }

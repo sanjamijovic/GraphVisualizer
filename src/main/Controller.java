@@ -56,7 +56,8 @@ public class Controller implements Initializable{
                 new FileChooser.ExtensionFilter("GML", "*.gml"),
                 new FileChooser.ExtensionFilter("CSV Edges", "*.csv"),
                 new FileChooser.ExtensionFilter("CSV Adjacency", "*.csv"),
-                new FileChooser.ExtensionFilter("CSV Matrix", "*.csv")
+                new FileChooser.ExtensionFilter("CSV Matrix", "*.csv"),
+                new FileChooser.ExtensionFilter("XML", "*.xml")
         );
         exportFileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
@@ -70,12 +71,16 @@ public class Controller implements Initializable{
             System.out.println("File not found");
         }
         Parser p;
+        String formatDescription = openFileChooser.getSelectedExtensionFilter().getDescription();
 
-        if(openFileChooser.getSelectedExtensionFilter().getDescription().equals("GML")) {
+        if(formatDescription.equals("XML")) {
+            System.out.println("xml");
+            p = new Importer();
+        } else if(formatDescription.equals("GML")) {
             p = new GMLParser();
-        } else if (openFileChooser.getSelectedExtensionFilter().getDescription().equals("CSV Edges")){
+        } else if (formatDescription.equals("CSV Edges")){
             p = new CSVEdges();
-        } else if(openFileChooser.getSelectedExtensionFilter().getDescription().equals("CSV Adjacency")) {
+        } else if(formatDescription.equals("CSV Adjacency")) {
             p = new CSVAdjacency();
         } else {
             p = new CSVMatrix();
@@ -91,7 +96,8 @@ public class Controller implements Initializable{
         System.out.println("Validan fajl");
         System.out.println("Cvorova: " + graph.numOfVertices() + " grana: " + graph.numOfEdges());
         updateNumbers();
-        canvas.setGraph(graph);
+        boolean randomLayout = !formatDescription.equals("XML");
+        canvas.setGraph(graph, randomLayout);
         canvas.repaint();
 
 
@@ -119,7 +125,7 @@ public class Controller implements Initializable{
         canvas.repaint();
     }
 
-    public void export() {
+    public void save() {
         if(graph == null)
             return;
         File file = exportFileChooser.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
@@ -281,4 +287,5 @@ public class Controller implements Initializable{
         graph.showLabels(checked);
         canvas.repaint();
     }
+
 }

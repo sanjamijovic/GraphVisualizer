@@ -63,19 +63,24 @@ public class Exporter {
             Element edgeElement = doc.createElement("edge");
 
             // source attribute
-            Attr sourceAtribute = doc.createAttribute("source");
-            sourceAtribute.setValue(edge.getSource().getId());
-            edgeElement.setAttributeNode(sourceAtribute);
+            Attr sourceAttribute = doc.createAttribute("source");
+            sourceAttribute.setValue(edge.getSource().getId());
+            edgeElement.setAttributeNode(sourceAttribute);
 
             //target attribute
-            Attr targetAtribute = doc.createAttribute("target");
-            targetAtribute.setValue(edge.getTarget().getId());
-            edgeElement.setAttributeNode(targetAtribute);
+            Attr targetAttribute = doc.createAttribute("target");
+            targetAttribute.setValue(edge.getTarget().getId());
+            edgeElement.setAttributeNode(targetAttribute);
 
             //label attribute
-            Attr labelAtribute = doc.createAttribute("label");
-            labelAtribute.setValue(edge.getLabel());
-            edgeElement.setAttributeNode(labelAtribute);
+            Attr labelAttribute = doc.createAttribute("label");
+            labelAttribute.setValue(edge.getLabel());
+            edgeElement.setAttributeNode(labelAttribute);
+
+            // color attribute
+            Attr colorAttribute = doc.createAttribute("color");
+            colorAttribute.setValue(edge.getColor().toString());
+            edgeElement.setAttributeNode(colorAttribute);
 
             edgesElement.appendChild(edgeElement);
         }
@@ -125,6 +130,11 @@ public class Exporter {
             Attr showLabelsAttribute = doc.createAttribute("showLabels");
             showLabelsAttribute.setValue(Boolean.toString(vertex.getShowLabels()));
             vertexElement.setAttributeNode(showLabelsAttribute);
+
+            // color attribute
+            Attr colorAttribute = doc.createAttribute("color");
+            colorAttribute.setValue(vertex.getColor().toString());
+            vertexElement.setAttributeNode(colorAttribute);
 
             verticesElement.appendChild(vertexElement);
         }

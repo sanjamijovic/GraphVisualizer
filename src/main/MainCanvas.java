@@ -79,9 +79,10 @@ public class MainCanvas extends Canvas {
         paint();
     }
 
-    void setGraph(Graph graph) {
+    void setGraph(Graph graph, boolean toInitialize) {
         this.graph = graph;
-        initializeGraphLayout();
+        if(toInitialize)
+            initializeGraphLayout();
     }
 
     @Override
