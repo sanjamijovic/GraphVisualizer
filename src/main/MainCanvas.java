@@ -32,19 +32,22 @@ public class MainCanvas extends Canvas {
             if(graph == null)
                 return;
             GraphicElement selectedElement = graph.getElement(e.getX(), e.getY());
-            if(selectedElement != null) {
+
+            if(selectedElement != null && selectedElements.contains(selectedElement)) {
+                return;
+            } else if (selectedElement != null) {
                 selectedElements.add(selectedElement);
                 selectedElement.setSelected(true);
                 selectedItem.appendText(selectedElement.toString());
-                repaint();
-            }
-            else {
+
+            } else {
                 for(GraphicElement element : selectedElements)
                     element.setSelected(false);
                 selectedItem.setText("");
                 selectedElements.clear();
-                repaint();
+
             }
+            repaint();
         });
 
         setOnMouseDragged(e -> {

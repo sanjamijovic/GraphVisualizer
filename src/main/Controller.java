@@ -38,6 +38,10 @@ public class Controller implements Initializable{
     private TextField scale;
     @FXML
     private TextArea selectedItem;
+    @FXML
+    private ColorPicker colorPicker;
+    @FXML
+    private ComboBox sizeChooser;
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
@@ -170,5 +174,39 @@ public class Controller implements Initializable{
                 canvas.repaint();
             }
         }
+    }
+
+    public void changeColor() {
+        if(graph == null)
+            return;
+
+        for(GraphicElement element : canvas.getSelectedElements())
+            element.setColor(colorPicker.getValue());
+        canvas.repaint();
+    }
+
+    public void changeSize() {
+        if(graph == null || sizeChooser.getValue() == null)
+            return;
+
+        for(GraphicElement element : canvas.getSelectedElements()) {
+            if(element instanceof Vertex) {
+                String sizePercentage = sizeChooser.getValue().toString();
+                double alpha = 1;
+                switch (sizePercentage) {
+                    case "50%" : alpha = 0.5; break;
+                    case "75%" : alpha = 0.75; break;
+                    case "125%" : alpha = 1.25; break;
+                    case "150%" : alpha = 1.5; break;
+                    case "200%" : alpha = 2; break;
+                }
+                ((Vertex) element).setRadius(((Vertex) element).getRadius() * alpha);
+            }
+        }
+        canvas.repaint();
+    }
+
+    public void shortestPath() {
+        System.out.println("shortest path");
     }
 }

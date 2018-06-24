@@ -36,26 +36,15 @@ public class Edge extends GraphicElement {
     public void paint(Canvas canvas) {
         GraphicsContext graphics = canvas.getGraphicsContext2D();
         graphics.setStroke(color);
+        if(isSelected())
+            graphics.setLineWidth(graphics.getLineWidth() * 2);
         graphics.strokeLine(source.getX(), source.getY(), target.getX(), target.getY());
+        if(isSelected())
+            graphics.setLineWidth(graphics.getLineWidth() / 2);
     }
 
     public boolean hasInside(double x, double y) {
         double epsilon = 0.01;
-//        double crossproduct = (y - y) * (target.getX() - source.getX()) - (x - source.getX()) * (target.getY() - source.getY());
-//
-//        if (Math.abs(crossproduct) > epsilon)
-//            return false;
-//
-//        double dotproduct = (x - source.getX()) * (target.getX() - source.getX()) + (y - source.getY())*(target.getY() - source.getY());
-//        if (dotproduct < 0)
-//            return false;
-//
-//        double squaredlengthba = (target.getX() - source.getX())*(target.getX() - source.getX()) +
-//                (target.getY() - source.getY())*(target.getY() - source.getY());
-//        if (dotproduct > squaredlengthba)
-//            return false;
-//
-//        return true;
         double difference = Vertex.distance(source.getX(), source.getY(), x, y) + Vertex.distance(x, y, target.getX(), target.getY())
                 - Vertex.distance(source.getX(), source.getY(), target.getX(), target.getY());
         return Math.abs(difference) < epsilon;

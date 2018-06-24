@@ -58,6 +58,12 @@ public class Vertex extends GraphicElement{
     public void paint(Canvas canvas) {
         GraphicsContext graphics = canvas.getGraphicsContext2D();
         graphics.setFill(color);
+        if(isSelected()) {
+            graphics.setStroke(SELECTED_COLOR);
+            graphics.setLineWidth(graphics.getLineWidth() * 3);
+            graphics.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
+            graphics.setLineWidth(graphics.getLineWidth() / 3);
+        }
         graphics.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
