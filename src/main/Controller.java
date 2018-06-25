@@ -6,9 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
@@ -53,7 +58,19 @@ public class Controller implements Initializable{
     @FXML
     private ColorPicker colorPicker;
     @FXML
+    private ColorPicker nodeFormattingColorPicker;
+    @FXML
+    private ColorPicker labelFormattingColorPicker;
+    @FXML
     private TextField scale;
+    @FXML
+    private TextField nodeMinSize;
+    @FXML
+    private TextField nodeMaxSize;
+    @FXML
+    private TextField labelMinSize;
+    @FXML
+    private TextField labelMaxSize;
     @FXML
     private TextArea selectedItem;
     @FXML
@@ -83,10 +100,8 @@ public class Controller implements Initializable{
 
     public void open(ActionEvent actionEvent) {
         File file = openFileChooser.showOpenDialog(openMenu.getParentPopup().getScene().getWindow());
-        if(file == null) {
-            System.out.println("File not found");
+        if(file == null)
             return;
-        }
         Parser p;
         String formatDescription = openFileChooser.getSelectedExtensionFilter().getDescription();
 
@@ -310,7 +325,7 @@ public class Controller implements Initializable{
         LinkedList<Vertex> nodes = graph.shortestPath(source, target);
 
         if(nodes == null) {
-            path.setText("Nedostizni");
+            path.setText("Nedostizni cvorovi. ");
             return;
         }
 
@@ -386,6 +401,38 @@ public class Controller implements Initializable{
         redoStack.clear();
         Graph cloneGraph = (Graph) graph.clone();
         undoStack.push(cloneGraph);
+    }
+
+    public void nodeColorFormatting(){
+        Color maxColor = nodeFormattingColorPicker.getValue();
+        graph.setColorsByDegree(maxColor, Graph.ChangeType.VERTEX_CHANGE);
+        canvas.repaint();
+    }
+
+    public void nodeSizeFormatting() {
+        double minSize, maxSize;
+        try {
+            minSize = Double.parseDouble(nodeMinSize.getText());
+            maxSize = Double.parseDouble(nodeMaxSize.getText());
+        } catch (NumberFormatException e) { return; }
+        graph.setSizeByDegree(minSize, maxSize, Graph.ChangeType.VERTEX_CHANGE);
+        canvas.repaint();
+    }
+
+    public void labelColorFormatting() {
+        Color maxColor = labelFormattingColorPicker.getValue();
+        graph.setColorsByDegree(maxColor, Graph.ChangeType.LABEL_CHANGE);
+        canvas.repaint();
+    }
+
+    public void labelSizeFormatting() {
+        double minSize, maxSize;
+        try {
+            minSize = Double.parseDouble(labelMinSize.getText());
+            maxSize = Double.parseDouble(labelMaxSize.getText());
+        } catch (NumberFormatException e) { return; }
+        graph.setSizeByDegree(minSize, maxSize, Graph.ChangeType.LABEL_CHANGE);
+        canvas.repaint();
     }
 
 }

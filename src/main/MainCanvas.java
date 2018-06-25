@@ -3,7 +3,6 @@ package main;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextArea;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 
 
@@ -19,9 +18,11 @@ public class MainCanvas extends Canvas {
         setOnScroll(e -> {
             if(graph != null) {
                 if(e.getDeltaY() > 0)
-                    graph.zoomIn(e.getX(), e.getY());
+//                    graph.zoomIn(e.getX(), e.getY());
+                    graph.zoomIn(getWidth() / 2, getHeight() / 2);
                 else
-                    graph.zoomOut(e.getX(), e.getY());
+//                    graph.zoomOut(e.getX(), e.getY());
+                    graph.zoomOut(getWidth() / 2, getHeight() / 2);
                 repaint();
             }
         });
@@ -80,6 +81,9 @@ public class MainCanvas extends Canvas {
     }
 
     void setGraph(Graph graph, boolean toInitialize, boolean showLabels) {
+        if(this.graph != null) {
+            graph.setZoomFactor(this.graph.getZoomFactor(), getWidth() / 2, getHeight() / 2);
+        }
         this.graph = graph;
         graph.showLabels(showLabels);
         if(toInitialize)

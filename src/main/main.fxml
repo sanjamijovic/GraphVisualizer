@@ -13,14 +13,18 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import main.MainCanvas?>
 
+<?import javafx.geometry.Insets?>
 <BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -159,4 +163,40 @@
             </children>
         </Pane>
     </bottom>
+   <left>
+      <SplitPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TabPane fx:id="formattingTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                  <Tab text="Node">
+                      <VBox spacing="10" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <padding>
+                              <Insets top="5" left="5" right="5" bottom="5"/>
+                          </padding>
+                          <ColorPicker fx:id="nodeFormattingColorPicker"/>
+                          <Button text="Apply color formatting" onAction="#nodeColorFormatting"/>
+                          <Label text="Min size:"/>
+                          <TextField fx:id="nodeMinSize"/>
+                          <Label text="Max size:"/>
+                          <TextField fx:id="nodeMaxSize"/>
+                          <Button text="Apply size formatting" onAction="#nodeSizeFormatting"/>
+                      </VBox>
+                  </Tab>
+                  <Tab text="Label">
+                      <VBox minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" spacing="10.0">
+                          <padding>
+                              <Insets top="5" left="5" right="5" bottom="5"/>
+                          </padding>
+                      <ColorPicker fx:id="labelFormattingColorPicker"/>
+                      <Button text="Apply color formatting" onAction="#labelColorFormatting"/>
+                      <Label text="Min size:"/>
+                          <TextField fx:id="labelMinSize"/>
+                      <Label text="Max size:"/>
+                          <TextField fx:id="labelMaxSize"/>
+                      <Button text="Apply size formatting" onAction="#labelSizeFormatting"/>
+                      </VBox>
+                  </Tab>
+              </tabs>
+            </TabPane>
+      </SplitPane>
+   </left>
 </BorderPane>

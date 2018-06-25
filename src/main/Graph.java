@@ -1,14 +1,20 @@
 package main;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 public class Graph implements Cloneable {
     private HashSet<Edge> edges;
     private HashMap<String, Vertex> vertices;
     private final static double ZOOM_SCALE = 1.2;
     private double zoomFactor = 1;
+
+    enum ChangeType { VERTEX_CHANGE, LABEL_CHANGE };
 
     public Graph() {
         edges = new HashSet<>();
@@ -64,7 +70,9 @@ public class Graph implements Cloneable {
         }
         g.edges = new HashSet<>();
         for(Edge e : edges) {
-            g.edges.add(new Edge(g.getVertex(e.getSource().getId()), g.getVertex(e.getTarget().getId())));
+            Edge newEdge = new Edge(g.getVertex(e.getSource().getId()), g.getVertex(e.getTarget().getId()), e.getLabel());
+            newEdge.setColor(e.getColor());
+            g.edges.add(newEdge);
         }
         return  g;
     }
@@ -194,5 +202,43 @@ public class Graph implements Cloneable {
     public void showLabels(boolean labels) {
         for(Vertex v : vertices.values())
             v.setShowLabels(labels);
+    }
+
+    private HashMap<Vertex, Integer> findDegrees() {
+        HashMap<Vertex, Integer> degrees = new HashMap<>();
+        for(Edge edge : edges) {
+            degrees.put(edge.getSource(), degrees.getOrDefault(edge.getSource(), 0) + 1);
+            degrees.put(edge.getTarget(), degrees.getOrDefault(edge.getTarget(), 0) + 1);
+        }
+        return degrees;
+    }
+
+    public void setColorsByDegree(Color maxColor, ChangeType type) {
+        HashMap<Vertex, Integer> degrees = findDegrees();
+        int maxDegree = Collections.max(degrees.values());
+        double minLight = maxColor.getBrightness();
+
+        for(Vertex vertex : vertices.values()) {
+            int degree = degrees.getOrDefault(vertex, 0);
+            double light = minLight + (1 - minLight) * (maxDegree - degree) / maxDegree;
+            if(type == ChangeType.VERTEX_CHANGE)
+                vertex.setColor(maxColor.deriveColor(0, 1, light / minLight, 1));
+            else
+                vertex.setFontColor(maxColor.deriveColor(0, 1, light / minLight, 1));
+        }
+    }
+
+    public void setSizeByDegree(double minSize, double maxSize, ChangeType type) {
+        HashMap<Vertex, Integer> degrees = findDegrees();
+        int maxDegree = Collections.max(degrees.values());
+
+        for(Vertex vertex : vertices.values()) {
+            int degree = degrees.getOrDefault(vertex, 0);
+            double size = (maxSize - minSize) * degree / maxDegree + minSize;
+            if(type == ChangeType.VERTEX_CHANGE)
+                vertex.setRadius(size);
+            else
+                vertex.setFontSize(size);
+        }
     }
 }
