@@ -126,11 +126,6 @@ public class Exporter {
             fontSizeAttribute.setValue(Double.toString(vertex.getFontSize()));
             vertexElement.setAttributeNode(fontSizeAttribute);
 
-            // show labels attribute
-            Attr showLabelsAttribute = doc.createAttribute("showLabels");
-            showLabelsAttribute.setValue(Boolean.toString(vertex.getShowLabels()));
-            vertexElement.setAttributeNode(showLabelsAttribute);
-
             // color attribute
             Attr colorAttribute = doc.createAttribute("color");
             colorAttribute.setValue(vertex.getColor().toString());

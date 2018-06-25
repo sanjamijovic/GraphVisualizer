@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public interface Parser {
-    Graph parseFile(File file) throws IOException, IllegalFileException;
+public abstract class Parser {
+    protected Graph graph = new Graph();
+
+    abstract Graph parseFile(File file) throws IOException, IllegalFileException;
 }

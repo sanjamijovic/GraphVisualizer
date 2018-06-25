@@ -13,11 +13,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-public class Importer implements Parser {
+public class Importer extends Parser {
 
     private Graph graph = new Graph();
 
-    public Graph parseFile(File file) {
+    public Graph parseFile(File file) throws IllegalFileException {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -26,10 +26,28 @@ public class Importer implements Parser {
 
             Element rootElement = doc.getDocumentElement();
             if(!rootElement.getNodeName().equals("graph"))
-                return null;
+                throw new IllegalFileException("Invalid XML file format.");
 
-            NodeList verticesList = doc.getElementsByTagName("vertex");
-            NodeList edgesList = doc.getElementsByTagName("edge");
+            NodeList vertices = rootElement.getElementsByTagName("vertices");
+            NodeList edges = rootElement.getElementsByTagName("edges");
+            if(vertices.getLength() != 1 || edges.getLength() != 1)
+                throw new IllegalFileException("Invalid XML file format.");
+
+            NodeList verticesList;
+            NodeList edgesList;
+
+            if(vertices.item(0).getNodeType() == Node.ELEMENT_NODE) {
+                verticesList = ((Element)vertices.item(0)).getElementsByTagName("vertex");
+            }
+            else
+                throw new IllegalFileException("Invalid XML file format.");
+
+            if(edges.item(0).getNodeType() == Node.ELEMENT_NODE) {
+                edgesList = ((Element)edges.item(0)).getElementsByTagName("edge");
+            }
+            else
+                throw new IllegalFileException("Invalid XML file format.");
+
 
             for(int i = 0; i < verticesList.getLength(); i++) {
                 Node vertexNode = verticesList.item(i);
@@ -48,7 +66,7 @@ public class Importer implements Parser {
             }
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new IllegalFileException("Invalid XML file format.");
         }
 
         return graph;
@@ -60,23 +78,20 @@ public class Importer implements Parser {
         v.setX(Double.parseDouble(vertexElement.getAttribute("x")));
         v.setY(Double.parseDouble(vertexElement.getAttribute("y")));
         v.setRadius(Double.parseDouble(vertexElement.getAttribute("radius")));
-        v.setShowLabels(Boolean.valueOf(vertexElement.getAttribute("showLabels")));
         v.setFontColor(Color.valueOf(vertexElement.getAttribute("fontColor")));
         v.setFontSize(Double.parseDouble(vertexElement.getAttribute("fontSize")));
         v.setColor(Color.valueOf(vertexElement.getAttribute("color")));
-        v.setSelected(Boolean.valueOf(vertexElement.getAttribute("isSelected")));
         return v;
     }
 
-    private Edge makeEdge(Node edgeNode) {
+    private Edge makeEdge(Node edgeNode) throws IllegalFileException {
         Element edgeElement = (Element)edgeNode;
         Vertex source = graph.getVertex(edgeElement.getAttribute("source"));
         Vertex target = graph.getVertex(edgeElement.getAttribute("target"));
         if(source == null || target == null)
-            return null;
+            throw new IllegalFileException("Invalid XML file format.");
         Edge e = new Edge(source, target, edgeElement.getAttribute("label"));
         e.setColor(Color.valueOf(edgeElement.getAttribute("color")));
-        e.setSelected(Boolean.valueOf(edgeElement.getAttribute("isSelected")));
         return e;
     }
 }

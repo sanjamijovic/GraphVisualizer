@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GMLParser implements Parser {
+public class GMLParser extends Parser {
     @Override
     public Graph parseFile(File file) throws IOException, IllegalFileException {
-        Graph g = new Graph();
 
         String all = new String(Files.readAllBytes(Paths.get(file.getPath())));
 
@@ -31,10 +30,10 @@ public class GMLParser implements Parser {
                     throw new IllegalFileException("Illegal node format");
                 }
                 if(nodeMatcher.groupCount() == 2) {
-                    g.addVertex(new Vertex(nodeMatcher.group(1)));
+                    graph.addVertex(new Vertex(nodeMatcher.group(1)));
                 }
                 else {
-                    g.addVertex(new Vertex(nodeMatcher.group(1), nodeMatcher.group(2)));
+                    graph.addVertex(new Vertex(nodeMatcher.group(1), nodeMatcher.group(2)));
                 }
 
             } else {
@@ -45,15 +44,15 @@ public class GMLParser implements Parser {
                 if(!edgeMatcher.find()) {
                     throw new IllegalFileException("Illegal edge format");
                 }
-                Vertex source = g.getVertex(edgeMatcher.group(1));
-                Vertex target = g.getVertex(edgeMatcher.group(2));
+                Vertex source = graph.getVertex(edgeMatcher.group(1));
+                Vertex target = graph.getVertex(edgeMatcher.group(2));
                 if(source == null || target == null)
                     throw new IllegalFileException("Edge for non existent node");
                 if(edgeMatcher.groupCount() == 3) {
-                    g.addEdge(new Edge(source, target));
+                    graph.addEdge(new Edge(source, target));
                 }
                 else {
-                    g.addEdge(new Edge(source, target, edgeMatcher.group(3)));
+                    graph.addEdge(new Edge(source, target, edgeMatcher.group(3)));
                 }
 
             }
@@ -61,6 +60,6 @@ public class GMLParser implements Parser {
         }
 
 
-        return g;
+        return graph;
     }
 }

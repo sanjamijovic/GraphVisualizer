@@ -5,10 +5,9 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CSVMatrix implements Parser {
+public class CSVMatrix extends Parser {
     @Override
     public Graph parseFile(File file) throws IllegalFileException, IOException {
-        Graph g = new Graph();
         FileInputStream fstream = new FileInputStream(file);
         BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
         String line = br.readLine();
@@ -17,7 +16,7 @@ public class CSVMatrix implements Parser {
         }
         String[] nodeLabels = line.split(";");
         for(int i = 1; i < nodeLabels.length; i++)
-            g.addVertex(new Vertex(nodeLabels[i]));
+            graph.addVertex(new Vertex(nodeLabels[i]));
 
 
         try {
@@ -28,7 +27,7 @@ public class CSVMatrix implements Parser {
                     throw new IllegalFileException("Illegal file format");
                 for(int j = 1; j < tokens.length; j++) {
                     if(tokens[j].equals("1")) {
-                        g.addEdge(new Edge(g.getVertex(nodeLabels[i]), g.getVertex(nodeLabels[j])));
+                        graph.addEdge(new Edge(graph.getVertex(nodeLabels[i]), graph.getVertex(nodeLabels[j])));
                     }
                     else if(!tokens[j].equals("0"))
                         throw new IllegalFileException("Illegal file exception");
@@ -41,6 +40,6 @@ public class CSVMatrix implements Parser {
             br.close();
         }
 
-        return g;
+        return graph;
     }
 }

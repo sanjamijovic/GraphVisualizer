@@ -6,12 +6,9 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CSVAdjacency implements Parser {
+public class CSVAdjacency extends Parser {
     @Override
     public Graph parseFile(File file) throws IllegalFileException, IOException {
-        Graph g = new Graph();
-
-
         FileInputStream fstream = new FileInputStream(file);
         BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
@@ -25,15 +22,15 @@ public class CSVAdjacency implements Parser {
                     throw new IllegalFileException("Illegal file format");
 
                 Vertex src, dst;
-                if((src = g.getVertex(tokens[0])) == null)
-                    g.addVertex(src = new Vertex(tokens[0]));
+                if((src = graph.getVertex(tokens[0])) == null)
+                    graph.addVertex(src = new Vertex(tokens[0]));
 
                 for (String token : tokens) {
                     if (token.equals(""))
                         throw new IllegalFileException("Illegal file format");
-                    if ((dst = g.getVertex(token)) == null)
-                        g.addVertex(dst = new Vertex(token));
-                    g.addEdge(new Edge(src, dst));
+                    if ((dst = graph.getVertex(token)) == null)
+                        graph.addVertex(dst = new Vertex(token));
+                    graph.addEdge(new Edge(src, dst));
 
                 }
 
@@ -43,6 +40,6 @@ public class CSVAdjacency implements Parser {
             br.close();
         }
 
-        return g;
+        return graph;
     }
 }

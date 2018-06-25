@@ -21,6 +21,10 @@ public class Controller implements Initializable{
     private Graph graph;
     private Thread graphAlgorithmThread = null;@FXML
     private MenuItem openMenu;
+
+    private final FileChooser openFileChooser = new FileChooser();
+    private final FileChooser exportFileChooser = new FileChooser();
+
     @FXML
     private MenuItem exportMenu;
     @FXML
@@ -48,9 +52,6 @@ public class Controller implements Initializable{
     @FXML
     private ComboBox changeType;
 
-    private final FileChooser openFileChooser = new FileChooser();
-    private final FileChooser exportFileChooser = new FileChooser();
-
     public Controller() {
         openFileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("GML", "*.gml"),
@@ -74,7 +75,6 @@ public class Controller implements Initializable{
         String formatDescription = openFileChooser.getSelectedExtensionFilter().getDescription();
 
         if(formatDescription.equals("XML")) {
-            System.out.println("xml");
             p = new Importer();
         } else if(formatDescription.equals("GML")) {
             p = new GMLParser();
@@ -98,7 +98,8 @@ public class Controller implements Initializable{
         updateNumbers();
         boolean randomLayout = !formatDescription.equals("XML");
         canvas.setGraph(graph, randomLayout);
-        canvas.repaint();
+        showLabels();
+//        canvas.repaint();
 
 
     }
@@ -283,6 +284,8 @@ public class Controller implements Initializable{
     }
 
     public void  showLabels() {
+        if(graph == null)
+            return;
         boolean checked = checkLabels.isSelected();
         graph.showLabels(checked);
         canvas.repaint();
