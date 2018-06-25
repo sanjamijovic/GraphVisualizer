@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
@@ -14,7 +16,8 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
 
 public class Controller implements Initializable{
 
@@ -24,6 +27,8 @@ public class Controller implements Initializable{
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
+    private ContextMenu rightClickMenu = new ContextMenu();
+    private  double rightClickX, rightClickY;
 
     @FXML
     private MenuItem exportMenu;
@@ -64,6 +69,10 @@ public class Controller implements Initializable{
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("XML", "*.xml")
         );
+        MenuItem addNode = new MenuItem("Add node");
+
+        addNode.setOnAction(this::addVertex);
+        rightClickMenu.getItems().addAll(addNode);
     }
 
     public void open(ActionEvent actionEvent) {
@@ -110,6 +119,16 @@ public class Controller implements Initializable{
         canvas.heightProperty().bind(canvasPane.heightProperty());
         canvas.setSelectedItem(selectedItem);
         selectedItem.setEditable(false);
+
+        canvas.setOnMousePressed(e -> {
+            if(e.getButton() == MouseButton.PRIMARY)
+                rightClickMenu.hide();
+        });
+        canvas.setOnContextMenuRequested(event ->  {
+            rightClickMenu.show(canvas, event.getScreenX(), event.getScreenY());
+            rightClickX = event.getX();
+            rightClickY = event.getY();
+        });
     }
 
     private void paint() {
@@ -288,6 +307,30 @@ public class Controller implements Initializable{
             return;
         boolean checked = checkLabels.isSelected();
         graph.showLabels(checked);
+        canvas.repaint();
+    }
+
+    public void createEdge() {
+        LinkedList<GraphicElement> selected = canvas.getSelectedElements();
+        if(selected.size() != 2)
+            return;
+        Vertex source = (Vertex) selected.get(0);
+        Vertex target = (Vertex) selected.get(1);
+        graph.addEdge(new Edge(source, target));
+        canvas.repaint();
+    }
+
+    private void addVertex(ActionEvent event) {
+        String id = Integer.toString((int) (Math.random() * Short.MAX_VALUE));
+        while (graph.getVertex(id) != null)
+            id = Integer.toString((int) (Math.random() * Integer.MAX_VALUE));
+        Vertex vertex = new Vertex(id, id);
+        graph.addVertex(vertex);
+        vertex.setX(rightClickX);
+        vertex.setY(rightClickY);
+        vertex.setRadius(vertex.getRadius() * graph.getZoomFactor());
+        boolean checked = checkLabels.isSelected();
+        vertex.setShowLabels(checked);
         canvas.repaint();
     }
 

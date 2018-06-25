@@ -8,6 +8,7 @@ public class Graph implements Cloneable {
     private HashSet<Edge> edges;
     private HashMap<String, Vertex> vertices;
     private final static double ZOOM_SCALE = 1.2;
+    private double zoomFactor = 1;
 
     public Graph() {
         edges = new HashSet<>();
@@ -75,6 +76,7 @@ public class Graph implements Cloneable {
             v.setRadius(v.getRadius() * ZOOM_SCALE);
             v.setFontSize(v.getFontSize() * ZOOM_SCALE);
         }
+        zoomFactor *= ZOOM_SCALE;
     }
 
     public void zoomOut(double x, double y) {
@@ -84,7 +86,14 @@ public class Graph implements Cloneable {
             v.setRadius(v.getRadius() / ZOOM_SCALE);
             v.setFontSize(v.getFontSize() / ZOOM_SCALE);
         }
+        zoomFactor /= ZOOM_SCALE;
     }
+
+
+    public double getZoomFactor() {
+        return zoomFactor;
+    }
+
 
     public GraphicElement getElement(double x, double y) {
         for(Vertex v : vertices.values())

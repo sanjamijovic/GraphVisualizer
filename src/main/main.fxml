@@ -121,8 +121,9 @@
                         <Button layoutX="74.0" layoutY="72.0" mnemonicParsing="false" onAction="#stopThread" text="Stop" textFill="#ee0707" />
                         <Label layoutX="4.0" layoutY="118.0" text="Selected:" />
                         <TextArea fx:id="selectedItem" editable="false" layoutX="7.0" layoutY="138.0" prefHeight="121.0" prefWidth="146.0" wrapText="true" />
-                        <Label layoutX="4.0" layoutY="268.0" text="Shortest path:" />
-                        <TextArea fx:id="path" editable="false" layoutX="7.0" layoutY="288.0" prefHeight="121.0" prefWidth="146.0" wrapText="true" />
+                        <Button layoutX="4.0" layoutY="268" mnemonicParsing="false" onAction="#createEdge" text="Create edge" />
+                        <Label layoutX="4.0" layoutY="314.0" text="Shortest path:" />
+                        <TextArea fx:id="path" editable="false" layoutX="7.0" layoutY="334.0" prefHeight="121.0" prefWidth="146.0" wrapText="true" />
                     </children>
                 </AnchorPane>
             </items>
