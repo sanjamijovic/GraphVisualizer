@@ -8,7 +8,6 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
@@ -22,40 +21,43 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable{
 
     private Graph graph;
-    private Thread graphAlgorithmThread = null;@FXML
-    private MenuItem openMenu;
+    private Thread graphAlgorithmThread = null;
 
-    private final FileChooser openFileChooser = new FileChooser();
-    private final FileChooser exportFileChooser = new FileChooser();
     private ContextMenu rightClickMenu = new ContextMenu();
     private  double rightClickX, rightClickY;
 
-    @FXML
-    private MenuItem exportMenu;
+    private final FileChooser openFileChooser = new FileChooser();
+    private final FileChooser exportFileChooser = new FileChooser();
+
+
     @FXML
     private MainCanvas canvas;
     @FXML
     private Pane canvasPane;
     @FXML
-    private Label numNodes;
+    private MenuItem openMenu;
     @FXML
-    private Label numEdges;
+    private MenuItem exportMenu;
+    @FXML
+    private CheckMenuItem checkLabels;
     @FXML
     private ComboBox algorithmChooser;
+    @FXML
+    private ComboBox sizeChooser;
+    @FXML
+    private ComboBox changeType;
+    @FXML
+    private ColorPicker colorPicker;
     @FXML
     private TextField scale;
     @FXML
     private TextArea selectedItem;
     @FXML
-    private ColorPicker colorPicker;
-    @FXML
-    private ComboBox sizeChooser;
-    @FXML
     private TextArea path;
     @FXML
-    private CheckMenuItem checkLabels;
+    private Label numNodes;
     @FXML
-    private ComboBox changeType;
+    private Label numEdges;
 
     public Controller() {
         openFileChooser.getExtensionFilters().addAll(
@@ -69,8 +71,8 @@ public class Controller implements Initializable{
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("XML", "*.xml")
         );
-        MenuItem addNode = new MenuItem("Add node");
 
+        MenuItem addNode = new MenuItem("Add node");
         addNode.setOnAction(this::addVertex);
         rightClickMenu.getItems().addAll(addNode);
     }
@@ -79,6 +81,7 @@ public class Controller implements Initializable{
         File file = openFileChooser.showOpenDialog(openMenu.getParentPopup().getScene().getWindow());
         if(file == null) {
             System.out.println("File not found");
+            return;
         }
         Parser p;
         String formatDescription = openFileChooser.getSelectedExtensionFilter().getDescription();
@@ -102,15 +105,10 @@ public class Controller implements Initializable{
             return;
         }
 
-        System.out.println("Validan fajl");
-        System.out.println("Cvorova: " + graph.numOfVertices() + " grana: " + graph.numOfEdges());
         updateNumbers();
         boolean randomLayout = !formatDescription.equals("XML");
         canvas.setGraph(graph, randomLayout);
         showLabels();
-//        canvas.repaint();
-
-
     }
 
     @Override
@@ -120,7 +118,7 @@ public class Controller implements Initializable{
         canvas.setSelectedItem(selectedItem);
         selectedItem.setEditable(false);
 
-        canvas.setOnMousePressed(e -> {
+        canvas.setOnMouseClicked(e -> {
             if(e.getButton() == MouseButton.PRIMARY)
                 rightClickMenu.hide();
         });
@@ -136,6 +134,7 @@ public class Controller implements Initializable{
     }
 
     public void zoomIn() {
+        // prosledjuju se koordinate u odnosu na koje se relativno zoom-ira (centar canvas-a)
         graph.zoomIn(canvas.getWidth() / 2, canvas.getHeight() / 2);
         canvas.repaint();
     }
@@ -153,14 +152,26 @@ public class Controller implements Initializable{
             if (exportFileChooser.getSelectedExtensionFilter().getDescription() == "PNG")
                 pngExport(file);
             else {
-                Exporter exporter = new Exporter(graph, file);
-                exporter.makeFile();
+                xmlExport(file);
             }
         }
     }
 
     public void pngExport(File file) {
+
+        double zoom = graph.getZoomFactor();
+        if(zoom !=  1) {
+            graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);
+            canvas.repaint();
+        }
+
         WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
+
+        if(zoom != 1) {
+            graph.setZoomFactor(zoom, canvas.getWidth() / 2, canvas.getHeight() / 2);
+            canvas.repaint();
+        }
+
         if(file != null) {
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
@@ -168,6 +179,16 @@ public class Controller implements Initializable{
                 // TODO: handle exception here
             }
         }
+    }
+
+    public void xmlExport(File file) {
+        double zoom = graph.getZoomFactor();
+        if(zoom !=  1)
+            graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);
+        Exporter exporter = new Exporter(graph, file);
+        exporter.makeFile();
+        if(zoom != 1)
+            graph.setZoomFactor(zoom, canvas.getWidth() / 2, canvas.getHeight() / 2);
     }
 
     public void startThread() {
@@ -329,6 +350,7 @@ public class Controller implements Initializable{
         vertex.setX(rightClickX);
         vertex.setY(rightClickY);
         vertex.setRadius(vertex.getRadius() * graph.getZoomFactor());
+        vertex.setFontSize(vertex.getFontSize() * graph.getZoomFactor());
         boolean checked = checkLabels.isSelected();
         vertex.setShowLabels(checked);
         canvas.repaint();

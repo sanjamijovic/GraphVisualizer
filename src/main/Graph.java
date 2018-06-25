@@ -89,6 +89,17 @@ public class Graph implements Cloneable {
         zoomFactor /= ZOOM_SCALE;
     }
 
+    public void setZoomFactor(double zoomFactor, double x, double y) {
+        double relativeZoomFactor = zoomFactor / this.zoomFactor;
+        this.zoomFactor = zoomFactor;
+        for(Vertex v : vertices.values()) {
+            v.setX((v.getX() - x) * relativeZoomFactor + x);
+            v.setY((v.getY() - y) * relativeZoomFactor + y);
+            v.setRadius(v.getRadius() * relativeZoomFactor);
+            v.setFontSize(v.getFontSize() * relativeZoomFactor);
+        }
+    }
+
 
     public double getZoomFactor() {
         return zoomFactor;
