@@ -27,7 +27,9 @@ import java.util.Stack;
 public class Controller implements Initializable{
 
     private Graph graph;
-    private Thread graphAlgorithmThread = null;
+    private Thread expansionContractionThread = null;
+    private Thread attractionThread = null;
+    private Thread repulsionThread = null;
 
     private ContextMenu rightClickMenu = new ContextMenu();
     private  double rightClickX, rightClickY;
@@ -211,7 +213,7 @@ public class Controller implements Initializable{
     }
 
     public void startThread() {
-        if(algorithmChooser.getValue() == null)
+        if(algorithmChooser.getValue() == null || graph == null)
             return;
 
         String algorithm = algorithmChooser.getValue().toString();
@@ -220,23 +222,44 @@ public class Controller implements Initializable{
                 startExpansionContraction(Double.parseDouble(scale.getText()));
             } catch (NumberFormatException e) {}
         } else {
-            // TODO: force atlas
+            try {
+                startForceAtlas(Double.parseDouble(scale.getText()));
+            } catch (NumberFormatException e) {}
         }
 
     }
 
     public void stopThread() {
-        if(graphAlgorithmThread != null)
-            graphAlgorithmThread.interrupt();
+        if(expansionContractionThread != null)
+            expansionContractionThread.interrupt();
+        if(attractionThread != null)
+            attractionThread.interrupt();
+        if(repulsionThread != null)
+            repulsionThread.interrupt();
     }
 
     public void startExpansionContraction(double scale) {
-        if(graphAlgorithmThread != null)
-            graphAlgorithmThread.interrupt();
+        if(expansionContractionThread != null)
+            expansionContractionThread.interrupt();
         if(graph == null)
             return;
-        graphAlgorithmThread = new ExpansionContractionThread(graph, scale, canvas);
-        graphAlgorithmThread.start();
+        expansionContractionThread = new ExpansionContractionThread(graph, scale, canvas);
+        expansionContractionThread.start();
+    }
+
+    public void startForceAtlas(double coefficient) {
+        if(attractionThread != null)
+            attractionThread.interrupt();
+        if(repulsionThread != null)
+            repulsionThread.interrupt();
+
+        if(graph == null)
+            return;
+
+        attractionThread = new AttractionThread(graph, 1.2, canvas);
+        attractionThread.start();
+        repulsionThread = new RepulsionThread(graph, 1.2, canvas);
+        repulsionThread.start();
     }
 
     public void delete() {
@@ -248,6 +271,7 @@ public class Controller implements Initializable{
             }
         }
         elements.clear();
+        selectedItem.setText("");
         canvas.repaint();
         updateNumbers();
     }
