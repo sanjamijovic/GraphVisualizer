@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
+import java.util.Stack;
 
 public class Controller implements Initializable{
 
@@ -28,6 +29,9 @@ public class Controller implements Initializable{
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
+
+    private Stack<Graph> undoStack = new Stack<>();
+    private Stack<Graph> redoStack = new Stack<>();
 
 
     @FXML
@@ -107,8 +111,8 @@ public class Controller implements Initializable{
 
         updateNumbers();
         boolean randomLayout = !formatDescription.equals("XML");
-        canvas.setGraph(graph, randomLayout);
-        showLabels();
+        canvas.setGraph(graph, randomLayout, checkLabels.isSelected());
+        canvas.repaint();
     }
 
     @Override
@@ -221,17 +225,20 @@ public class Controller implements Initializable{
     }
 
     public void delete() {
+        putToUndo();
         LinkedList<GraphicElement> elements = canvas.getSelectedElements();
         for(GraphicElement element : elements) {
             if (element != null) {
                 graph.deleteElement(element);
-                canvas.repaint();
             }
         }
+        elements.clear();
+        canvas.repaint();
         updateNumbers();
     }
 
     public void change() {
+        putToUndo();
         if(colorPicker.getValue() != null)
             changeColor();
         if(sizeChooser.getValue() != null)
@@ -332,6 +339,7 @@ public class Controller implements Initializable{
     }
 
     public void createEdge() {
+        putToUndo();
         LinkedList<GraphicElement> selected = canvas.getSelectedElements();
         if(selected.size() != 2)
             return;
@@ -342,6 +350,7 @@ public class Controller implements Initializable{
     }
 
     private void addVertex(ActionEvent event) {
+        putToUndo();
         String id = Integer.toString((int) (Math.random() * Short.MAX_VALUE));
         while (graph.getVertex(id) != null)
             id = Integer.toString((int) (Math.random() * Integer.MAX_VALUE));
@@ -354,6 +363,29 @@ public class Controller implements Initializable{
         boolean checked = checkLabels.isSelected();
         vertex.setShowLabels(checked);
         canvas.repaint();
+    }
+
+    public void undo() {
+        undoRedo(redoStack, undoStack);
+    }
+
+    public void redo() {
+        undoRedo(undoStack, redoStack);
+    }
+
+    private void undoRedo(Stack<Graph> pushStack, Stack<Graph> popStack) {
+        if(popStack.size() == 0)
+            return;
+        pushStack.push(graph);
+        graph = popStack.pop();
+        canvas.setGraph(graph, false, checkLabels.isSelected());
+        canvas.repaint();
+    }
+
+    public void putToUndo() {
+        redoStack.clear();
+        Graph cloneGraph = (Graph) graph.clone();
+        undoStack.push(cloneGraph);
     }
 
 }

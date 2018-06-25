@@ -10,7 +10,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.text.DecimalFormat;
 
-public class Vertex extends GraphicElement {
+public class Vertex extends GraphicElement implements Cloneable {
     private String id, label;
     private double x, y, radius;
     private static final double DEFAULT_RADIUS = 10;
@@ -86,7 +86,7 @@ public class Vertex extends GraphicElement {
             graphics.setFont(new Font(fontSize));
             graphics.setTextAlign(TextAlignment.CENTER);
             graphics.setTextBaseline(VPos.CENTER);
-            graphics.setFill(Color.BLACK);
+            graphics.setStroke(Color.BLACK);
             graphics.strokeText(id, x, y);
             graphics.setFill(fontColor);
             graphics.fillText(id, x, y);
@@ -114,6 +114,17 @@ public class Vertex extends GraphicElement {
         if (!(obj instanceof Vertex))
             return false;
         return ((Vertex) obj).getId().equals(id);
+    }
+
+    @Override
+    public Vertex clone() {
+        Vertex vertex = null;
+        try {
+            vertex =  (Vertex) super.clone();
+            vertex.setSelected(false);
+        } catch (CloneNotSupportedException e) {
+        }
+        return vertex;
     }
 
     public void setShowLabels(boolean labels) {

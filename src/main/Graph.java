@@ -52,12 +52,19 @@ public class Graph implements Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        Graph g = (Graph) super.clone();
-        g.vertices = new HashMap<>(vertices);
+    protected Object clone() {
+        Graph g = null;
+        try {
+            g = (Graph) super.clone();
+        } catch (CloneNotSupportedException e) {
+        }
+        g.vertices = new HashMap<>();
+        for(Vertex v : vertices.values()) {
+            g.vertices.put(v.getId(), v.clone());
+        }
         g.edges = new HashSet<>();
         for(Edge e : edges) {
-            g.edges.add(new Edge(g.vertices.get(e.getSource().getId()), g.vertices.get(e.getTarget().getId())));
+            g.edges.add(new Edge(g.getVertex(e.getSource().getId()), g.getVertex(e.getTarget().getId())));
         }
         return  g;
     }
