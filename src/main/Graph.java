@@ -100,6 +100,7 @@ public class Graph implements Cloneable {
         zoom(x, y, relativeZoomFactor);
     }
 
+
     private void zoom(double x, double y, double zoomFactor) {
         for(Vertex v : vertices.values()) {
             v.setX((v.getX() - x) * zoomFactor + x);

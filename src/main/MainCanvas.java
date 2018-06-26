@@ -78,9 +78,6 @@ public class MainCanvas extends Canvas {
     }
 
     void setGraph(Graph graph, boolean toInitialize, boolean showLabels) {
-        if(this.graph != null) {
-            graph.setZoomFactor(this.graph.getZoomFactor(), getWidth() / 2, getHeight() / 2);
-        }
         this.graph = graph;
         graph.showLabels(showLabels);
         if(toInitialize)
@@ -144,5 +141,9 @@ public class MainCanvas extends Canvas {
             element.setSelected(false);
         selectedItem.setText("");
         selectedElements.clear();
+    }
+
+    public double getZoomFactor() {
+        return graph.getZoomFactor();
     }
 }

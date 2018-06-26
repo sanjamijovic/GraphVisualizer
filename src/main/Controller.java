@@ -406,6 +406,7 @@ public class Controller implements Initializable{
             return;
         pushStack.push(graph);
         graph = popStack.pop();
+        graph.setZoomFactor(canvas.getZoomFactor(), canvas.getWidth() / 2, canvas.getHeight() / 2);
         canvas.setGraph(graph, false, checkLabels.isSelected());
         canvas.repaint();
     }
