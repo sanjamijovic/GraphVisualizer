@@ -179,14 +179,14 @@ public class Controller implements Initializable{
     private void pngExport(File file) {
 
         double zoom = graph.getZoomFactor();
-        if(zoom !=  1 && algorithmThread == null) {
+        if(zoom !=  1) {
             graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);
             canvas.repaint();
         }
 
         WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
 
-        if(zoom != 1 && algorithmThread == null) {
+        if(zoom != 1) {
             graph.setZoomFactor(zoom, canvas.getWidth() / 2, canvas.getHeight() / 2);
             canvas.repaint();
         }
