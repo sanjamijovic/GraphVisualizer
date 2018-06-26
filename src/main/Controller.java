@@ -180,14 +180,14 @@ public class Controller implements Initializable{
 
         double zoom = graph.getZoomFactor();
         if(zoom !=  1) {
-            graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);
+            graph.setZoomFactor(1, graph.getLastZoomX(), graph.getLastZoomY());
             canvas.repaint();
         }
 
         WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
 
         if(zoom != 1) {
-            graph.setZoomFactor(zoom, canvas.getWidth() / 2, canvas.getHeight() / 2);
+            graph.setZoomFactor(zoom, graph.getLastZoomX(), graph.getLastZoomY());
             canvas.repaint();
         }
 
