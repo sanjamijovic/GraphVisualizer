@@ -85,33 +85,27 @@ public class Graph implements Cloneable {
     }
 
     public void zoomIn(double x, double y) {
-        for(Vertex v : vertices.values()) {
-            v.setX((v.getX() - x) * ZOOM_SCALE + x);
-            v.setY((v.getY() - y) * ZOOM_SCALE + y);
-            v.setRadius(v.getRadius() * ZOOM_SCALE);
-            v.setFontSize(v.getFontSize() * ZOOM_SCALE);
-        }
+        zoom(x, y, ZOOM_SCALE);
         zoomFactor *= ZOOM_SCALE;
     }
 
     public void zoomOut(double x, double y) {
-        for(Vertex v : vertices.values()) {
-            v.setX((v.getX() - x) / ZOOM_SCALE + x);
-            v.setY((v.getY() - y) / ZOOM_SCALE + y);
-            v.setRadius(v.getRadius() / ZOOM_SCALE);
-            v.setFontSize(v.getFontSize() / ZOOM_SCALE);
-        }
+        zoom(x, y, 1 / ZOOM_SCALE);
         zoomFactor /= ZOOM_SCALE;
     }
 
     public void setZoomFactor(double zoomFactor, double x, double y) {
         double relativeZoomFactor = zoomFactor / this.zoomFactor;
         this.zoomFactor = zoomFactor;
+        zoom(x, y, relativeZoomFactor);
+    }
+
+    private void zoom(double x, double y, double zoomFactor) {
         for(Vertex v : vertices.values()) {
-            v.setX((v.getX() - x) * relativeZoomFactor + x);
-            v.setY((v.getY() - y) * relativeZoomFactor + y);
-            v.setRadius(v.getRadius() * relativeZoomFactor);
-            v.setFontSize(v.getFontSize() * relativeZoomFactor);
+            v.setX((v.getX() - x) * zoomFactor + x);
+            v.setY((v.getY() - y) * zoomFactor + y);
+            v.setRadius(v.getRadius() * zoomFactor);
+            v.setFontSize(v.getFontSize() * zoomFactor);
         }
     }
 

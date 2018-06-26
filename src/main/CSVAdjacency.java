@@ -14,9 +14,6 @@ public class CSVAdjacency extends Parser {
 
                 String[] tokens = line.split(";");
 
-                if(tokens.length < 2)
-                    throw new IllegalFileException("Illegal file format");
-
                 Vertex src, dst;
                 if((src = graph.getVertex(tokens[0])) == null)
                     graph.addVertex(src = new Vertex(tokens[0]));

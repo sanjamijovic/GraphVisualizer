@@ -14,9 +14,9 @@ public class GMLParser extends Parser {
 
         String all = new String(Files.readAllBytes(Paths.get(file.getPath())));
 
-        String pattern = "graph\\s*\\[(?:\\s*(?:node|edge)\\s*\\[[^]]+]\\s*)+]\\s*";
-        if(!all.matches(pattern))
-            throw new IllegalFileException("Invalid file format");
+//        String pattern = "graph\\s*\\[(?:\\s*(?:node|edge)\\s*\\[[^]]+]\\s*)+]\\s*";
+//        if(!all.matches(pattern))
+//            throw new IllegalFileException("Invalid file format");
 
         Matcher m = Pattern.compile("(node|edge)\\s*\\[([^]]+)]").matcher(all);
         while(m.find()) {

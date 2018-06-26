@@ -120,7 +120,11 @@ public class Controller implements Initializable{
         try {
             graph = p.parseFile(file);
         } catch (IOException | IllegalFileException e) {
-            System.out.println(e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid file format");
+            alert.setContentText("Selected file does not match " + formatDescription + " format.");
+            alert.showAndWait();
             return;
         }
 
