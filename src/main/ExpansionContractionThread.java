@@ -2,7 +2,6 @@ package main;
 
 import javafx.application.Platform;
 
-import java.awt.*;
 import java.util.Iterator;
 
 public class ExpansionContractionThread extends AlgorithmThread {

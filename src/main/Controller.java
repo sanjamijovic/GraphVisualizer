@@ -153,7 +153,7 @@ public class Controller implements Initializable{
     }
 
     public void zoomIn() {
-        // prosledjuju se koordinate u odnosu na koje se relativno zoom-ira (centar canvas-a)
+        // prosledjuju se koordinate u odnosu na koje se relativno zoomira (centar canvasa)
         graph.zoomIn(canvas.getWidth() / 2, canvas.getHeight() / 2);
         canvas.repaint();
     }
@@ -168,7 +168,7 @@ public class Controller implements Initializable{
             return;
         File file = exportFileChooser.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
         if(file != null) {
-            if (exportFileChooser.getSelectedExtensionFilter().getDescription() == "PNG")
+            if (exportFileChooser.getSelectedExtensionFilter().getDescription().equals("PNG"))
                 pngExport(file);
             else {
                 xmlExport(file);
@@ -176,17 +176,17 @@ public class Controller implements Initializable{
         }
     }
 
-    public void pngExport(File file) {
+    private void pngExport(File file) {
 
         double zoom = graph.getZoomFactor();
-        if(zoom !=  1) {
+        if(zoom !=  1 && algorithmThread == null) {
             graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);
             canvas.repaint();
         }
 
         WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
 
-        if(zoom != 1) {
+        if(zoom != 1 && algorithmThread == null) {
             graph.setZoomFactor(zoom, canvas.getWidth() / 2, canvas.getHeight() / 2);
             canvas.repaint();
         }
@@ -200,7 +200,7 @@ public class Controller implements Initializable{
         }
     }
 
-    public void xmlExport(File file) {
+    private void xmlExport(File file) {
         double zoom = graph.getZoomFactor();
         if(zoom !=  1)
             graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);

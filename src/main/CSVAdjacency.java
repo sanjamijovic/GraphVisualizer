@@ -1,10 +1,6 @@
 package main;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CSVAdjacency extends Parser {
     @Override

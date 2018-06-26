@@ -1,9 +1,6 @@
 package main;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CSVMatrix extends Parser {
     @Override
