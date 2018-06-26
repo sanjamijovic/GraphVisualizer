@@ -204,7 +204,7 @@ public class Graph implements Cloneable {
             v.setShowLabels(labels);
     }
 
-    private HashMap<Vertex, Integer> findDegrees() {
+    public HashMap<Vertex, Integer> findDegrees() {
         HashMap<Vertex, Integer> degrees = new HashMap<>();
         for(Edge edge : edges) {
             degrees.put(edge.getSource(), degrees.getOrDefault(edge.getSource(), 0) + 1);

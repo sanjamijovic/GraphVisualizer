@@ -16,7 +16,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("Graph Visualizer");
 
         Scene scene = new Scene(root);
@@ -24,6 +25,8 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
+        Controller controller = loader.getController();
+        primaryStage.setOnCloseRequest(e -> controller.stopThread());
     }
 
 

@@ -27,9 +27,7 @@ import java.util.Stack;
 public class Controller implements Initializable{
 
     private Graph graph;
-    private Thread expansionContractionThread = null;
-    private Thread attractionThread = null;
-    private Thread repulsionThread = null;
+    private Thread algorithmThread = null;
 
     private ContextMenu rightClickMenu = new ContextMenu();
     private  double rightClickX, rightClickY;
@@ -230,36 +228,28 @@ public class Controller implements Initializable{
     }
 
     public void stopThread() {
-        if(expansionContractionThread != null)
-            expansionContractionThread.interrupt();
-        if(attractionThread != null)
-            attractionThread.interrupt();
-        if(repulsionThread != null)
-            repulsionThread.interrupt();
+        if(algorithmThread != null)
+            algorithmThread.interrupt();
     }
 
     public void startExpansionContraction(double scale) {
-        if(expansionContractionThread != null)
-            expansionContractionThread.interrupt();
+        if(algorithmThread != null)
+            algorithmThread.interrupt();
         if(graph == null)
             return;
-        expansionContractionThread = new ExpansionContractionThread(graph, scale, canvas);
-        expansionContractionThread.start();
+        algorithmThread = new ExpansionContractionThread(graph, scale, canvas);
+        algorithmThread.start();
     }
 
     public void startForceAtlas(double coefficient) {
-        if(attractionThread != null)
-            attractionThread.interrupt();
-        if(repulsionThread != null)
-            repulsionThread.interrupt();
+        if(algorithmThread != null)
+            algorithmThread.interrupt();
 
         if(graph == null)
             return;
 
-        attractionThread = new AttractionThread(graph, 1.2, canvas);
-        attractionThread.start();
-        repulsionThread = new RepulsionThread(graph, 1.2, canvas);
-        repulsionThread.start();
+        algorithmThread = new ForceAtlasThread(graph, coefficient, canvas);
+        algorithmThread.start();
     }
 
     public void delete() {

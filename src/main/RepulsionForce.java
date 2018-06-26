@@ -11,21 +11,26 @@ public class RepulsionForce extends Force {
         double distance = Math.sqrt(Math.pow(first.getX() - second.getX(), 2) + Math.pow(first.getY() - second.getY(), 2))
                 - first.getRadius() - second.getRadius();
 
+        Displacement displacementFirst = first.getDisplacement();
+        Displacement displacementSecond = second.getDisplacement();
+
         double k;
         if(distance > 0) {
-            k = coefficient * (graph.getDegree(first) + 1) * (graph.getDegree(second) + 1) / Math.pow(distance, 2);
+
+            k = coefficient * (displacementFirst.degree + 1) * (displacementSecond.degree + 1) / distance / distance;
+            double deltaX, deltaY;
+            deltaX = (first.getX() - second.getX()) * k;
+            deltaY = (first.getY() - second.getY()) * k;
+
+            displacementFirst.dx += deltaX;
+            displacementSecond.dx -= deltaX;
+            displacementFirst.dy +=deltaY;
+            displacementSecond.dy -= deltaY;
         }
         else {
-            k = 100 * coefficient * (graph.getDegree(first) + 1) * (graph.getDegree(second) + 1);
+            k = 100 * coefficient * (displacementFirst.degree + 1) * (displacementSecond.degree + 1);
         }
 
-        double displacementX, displacementY;
-        displacementX = (first.getX() - second.getX()) * k;
-        displacementY = (first.getY() - second.getY()) * k;
 
-        first.setX(first.getX() + displacementX);
-        second.setX(second.getX() - displacementX);
-        first.setY(first.getY() + displacementY);
-        second.setY(second.getY() - displacementY);
     }
 }

@@ -18,11 +18,9 @@ public class MainCanvas extends Canvas {
         setOnScroll(e -> {
             if(graph != null) {
                 if(e.getDeltaY() > 0)
-//                    graph.zoomIn(e.getX(), e.getY());
-                    graph.zoomIn(getWidth() / 2, getHeight() / 2);
+                    graph.zoomIn(e.getX(), e.getY());
                 else
-//                    graph.zoomOut(e.getX(), e.getY());
-                    graph.zoomOut(getWidth() / 2, getHeight() / 2);
+                    graph.zoomOut(e.getX(), e.getY());
                 repaint();
             }
         });

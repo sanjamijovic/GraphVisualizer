@@ -8,15 +8,20 @@ public class AttractionForce extends Force {
 
     @Override
     public void apply(Graph graph, Vertex first, Vertex second) {
-        double k = -coefficient / (graph.getDegree(first) + 1);
 
-        double displacementX, displacementY;
-        displacementX = k * (first.getX() - second.getX());
-        displacementY = k * (first.getY() - second.getY());
+        Displacement displacementFirst = first.getDisplacement();
+        Displacement displacementSecond = second.getDisplacement();
 
-        first.setX(first.getX() + displacementX);
-        second.setX(second.getX() - displacementX);
-        first.setY(first.getY() + displacementY);
-        second.setY(second.getY() - displacementY);
+        double k = - coefficient / (displacementFirst.degree + 1);
+
+        double deltaX, deltaY;
+        deltaX = k * (first.getX() - second.getX());
+        deltaY = k * (first.getY() - second.getY());
+
+
+        displacementFirst.dx += deltaX;
+        displacementSecond.dx -= deltaX;
+        displacementFirst.dy +=deltaY;
+        displacementSecond.dy -= deltaY;
     }
 }

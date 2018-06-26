@@ -20,6 +20,8 @@ public class Vertex extends GraphicElement implements Cloneable {
     private boolean showLabels;
     private double fontSize = DEFAULT_FONT_SIZE;
 
+    private Displacement displacement = new Displacement();
+
     public Color getFontColor() {
         return fontColor;
     }
@@ -37,6 +39,10 @@ public class Vertex extends GraphicElement implements Cloneable {
         this.id = id;
         this.label = label;
         this.radius = DEFAULT_RADIUS;
+    }
+
+    public Displacement getDisplacement() {
+        return displacement;
     }
 
     public double getX() {
