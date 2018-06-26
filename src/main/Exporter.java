@@ -30,7 +30,7 @@ public class Exporter {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            doc = (Document) docBuilder.newDocument();
+            doc = docBuilder.newDocument();
 
             // root element
             Element rootElement = doc.createElement("graph");
@@ -92,9 +92,9 @@ public class Exporter {
             Element vertexElement = doc.createElement("vertex");
 
             // id attribute
-            Attr idAtribute = doc.createAttribute("id");
-            idAtribute.setValue(vertex.getId());
-            vertexElement.setAttributeNode(idAtribute);
+            Attr idAttribute = doc.createAttribute("id");
+            idAttribute.setValue(vertex.getId());
+            vertexElement.setAttributeNode(idAttribute);
 
             // label attribute
             Attr labelAttribute = doc.createAttribute("label");

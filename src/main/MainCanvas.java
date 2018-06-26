@@ -73,7 +73,6 @@ public class MainCanvas extends Canvas {
     }
 
     public void repaint() {
-        // initializeGraphLayout();
         getGraphicsContext2D().clearRect(0, 0, getWidth(), getHeight());
         paint();
     }

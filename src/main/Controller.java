@@ -152,10 +152,6 @@ public class Controller implements Initializable{
         });
     }
 
-    private void paint() {
-        graph.paint(canvas);
-    }
-
     public void zoomIn() {
         // prosledjuju se koordinate u odnosu na koje se relativno zoomira (centar canvasa)
         graph.zoomIn(canvas.getWidth() / 2, canvas.getHeight() / 2);
@@ -199,7 +195,6 @@ public class Controller implements Initializable{
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
             } catch (IOException e) {
-                // TODO: handle exception here
             }
         }
     }

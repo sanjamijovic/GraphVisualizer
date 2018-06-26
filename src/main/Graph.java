@@ -235,13 +235,4 @@ public class Graph implements Cloneable {
                 vertex.setFontSize(size);
         }
     }
-
-    public int getDegree(Vertex vertex) {
-        int degree = 0;
-        for(Edge e : edges) {
-            if(e.getSource() == vertex || e.getTarget() == vertex)
-                degree++;
-        }
-        return degree;
-    }
 }
