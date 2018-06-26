@@ -14,6 +14,8 @@ public class Graph implements Cloneable {
     private final static double ZOOM_SCALE = 1.2;
     private double zoomFactor = 1;
 
+    private double lastZoomX, lastZoomY;
+
     enum ChangeType { VERTEX_CHANGE, LABEL_CHANGE };
 
     public Graph() {
@@ -108,13 +110,45 @@ public class Graph implements Cloneable {
             v.setRadius(v.getRadius() * zoomFactor);
             v.setFontSize(v.getFontSize() * zoomFactor);
         }
+        lastZoomX = x;
+        lastZoomY = y;
     }
-
 
     public double getZoomFactor() {
         return zoomFactor;
     }
 
+    public double getLastZoomX() {
+        return lastZoomX;
+    }
+
+    public double getLastZoomY() {
+        return lastZoomY;
+    }
+
+    public void moveRelativeTo(Graph other) {
+        Vertex first = null, second = null;
+        for(Vertex vertex : other.getVertices().values()) {
+            if(getVertex(vertex.getId()) != null) {
+                first = getVertex(vertex.getId()); // this
+                second = vertex; // other
+            }
+        }
+        if(first == null)
+            return;
+        double dx = second.getX() - first.getX();
+        double dy = second.getY() - first.getY();
+
+        move(dx, dy);
+    }
+
+    private void move(double dx, double dy) {
+        for(Vertex vertex : vertices.values()) {
+            vertex.setX(vertex.getX() + dx);
+            vertex.setY(vertex.getY() + dy);
+        }
+
+    }
 
     public GraphicElement getElement(double x, double y) {
         for(Vertex v : vertices.values())

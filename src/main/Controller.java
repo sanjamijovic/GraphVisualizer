@@ -404,9 +404,14 @@ public class Controller implements Initializable{
     private void undoRedo(Stack<Graph> pushStack, Stack<Graph> popStack) {
         if(popStack.size() == 0)
             return;
+        Graph oldGraph = graph;
+
         pushStack.push(graph);
         graph = popStack.pop();
-        graph.setZoomFactor(canvas.getZoomFactor(), canvas.getWidth() / 2, canvas.getHeight() / 2);
+
+        graph.setZoomFactor(oldGraph.getZoomFactor(), graph.getLastZoomX(), graph.getLastZoomY());
+        graph.moveRelativeTo(oldGraph);
+
         canvas.setGraph(graph, false, checkLabels.isSelected());
         canvas.repaint();
     }
