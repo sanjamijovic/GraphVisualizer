@@ -24,13 +24,13 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
-public class Controller implements Initializable{
+public class Controller implements Initializable {
 
     private Graph graph;
     private Thread algorithmThread = null;
 
     private ContextMenu rightClickMenu = new ContextMenu();
-    private  double rightClickX, rightClickY;
+    private double rightClickX, rightClickY;
 
     private final FileChooser openFileChooser = new FileChooser();
     private final FileChooser exportFileChooser = new FileChooser();
@@ -100,18 +100,18 @@ public class Controller implements Initializable{
 
     public void open(ActionEvent actionEvent) {
         File file = openFileChooser.showOpenDialog(openMenu.getParentPopup().getScene().getWindow());
-        if(file == null)
+        if (file == null)
             return;
         Parser p;
         String formatDescription = openFileChooser.getSelectedExtensionFilter().getDescription();
 
-        if(formatDescription.equals("XML")) {
+        if (formatDescription.equals("XML")) {
             p = new Importer();
-        } else if(formatDescription.equals("GML")) {
+        } else if (formatDescription.equals("GML")) {
             p = new GMLParser();
-        } else if (formatDescription.equals("CSV Edges")){
+        } else if (formatDescription.equals("CSV Edges")) {
             p = new CSVEdges();
-        } else if(formatDescription.equals("CSV Adjacency")) {
+        } else if (formatDescription.equals("CSV Adjacency")) {
             p = new CSVAdjacency();
         } else {
             p = new CSVMatrix();
@@ -142,10 +142,10 @@ public class Controller implements Initializable{
         selectedItem.setEditable(false);
 
         canvas.setOnMouseClicked(e -> {
-            if(e.getButton() == MouseButton.PRIMARY)
+            if (e.getButton() == MouseButton.PRIMARY)
                 rightClickMenu.hide();
         });
-        canvas.setOnContextMenuRequested(event ->  {
+        canvas.setOnContextMenuRequested(event -> {
             rightClickMenu.show(canvas, event.getScreenX(), event.getScreenY());
             rightClickX = event.getX();
             rightClickY = event.getY();
@@ -164,10 +164,10 @@ public class Controller implements Initializable{
     }
 
     public void save() {
-        if(graph == null)
+        if (graph == null)
             return;
         File file = exportFileChooser.showSaveDialog(exportMenu.getParentPopup().getScene().getWindow());
-        if(file != null) {
+        if (file != null) {
             if (exportFileChooser.getSelectedExtensionFilter().getDescription().equals("PNG"))
                 pngExport(file);
             else {
@@ -179,19 +179,19 @@ public class Controller implements Initializable{
     private void pngExport(File file) {
 
         double zoom = graph.getZoomFactor();
-        if(zoom !=  1) {
+        if (zoom != 1) {
             graph.setZoomFactor(1, graph.getLastZoomX(), graph.getLastZoomY());
             canvas.repaint();
         }
 
         WritableImage image = canvas.snapshot(new SnapshotParameters(), null);
 
-        if(zoom != 1) {
+        if (zoom != 1) {
             graph.setZoomFactor(zoom, graph.getLastZoomX(), graph.getLastZoomY());
             canvas.repaint();
         }
 
-        if(file != null) {
+        if (file != null) {
             try {
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
             } catch (IOException e) {
@@ -201,50 +201,52 @@ public class Controller implements Initializable{
 
     private void xmlExport(File file) {
         double zoom = graph.getZoomFactor();
-        if(zoom !=  1)
+        if (zoom != 1)
             graph.setZoomFactor(1, canvas.getWidth() / 2, canvas.getHeight() / 2);
         Exporter exporter = new Exporter(graph, file);
         exporter.makeFile();
-        if(zoom != 1)
+        if (zoom != 1)
             graph.setZoomFactor(zoom, canvas.getWidth() / 2, canvas.getHeight() / 2);
     }
 
     public void startThread() {
-        if(algorithmChooser.getValue() == null || graph == null)
+        if (algorithmChooser.getValue() == null || graph == null)
             return;
 
         String algorithm = algorithmChooser.getValue().toString();
-        if(algorithm.equals("Expansion/Contraction")) {
+        if (algorithm.equals("Expansion/Contraction")) {
             try {
                 startExpansionContraction(Double.parseDouble(scale.getText()));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
         } else {
             try {
                 startForceAtlas(Double.parseDouble(scale.getText()));
-            } catch (NumberFormatException e) {}
+            } catch (NumberFormatException e) {
+            }
         }
 
     }
 
     public void stopThread() {
-        if(algorithmThread != null)
+        if (algorithmThread != null)
             algorithmThread.interrupt();
     }
 
     public void startExpansionContraction(double scale) {
-        if(algorithmThread != null)
+        if (algorithmThread != null)
             algorithmThread.interrupt();
-        if(graph == null)
+        if (graph == null)
             return;
         algorithmThread = new ExpansionContractionThread(graph, scale, canvas);
         algorithmThread.start();
     }
 
     public void startForceAtlas(double coefficient) {
-        if(algorithmThread != null)
+        if (algorithmThread != null)
             algorithmThread.interrupt();
 
-        if(graph == null)
+        if (graph == null)
             return;
 
         algorithmThread = new ForceAtlasThread(graph, coefficient, canvas);
@@ -254,7 +256,7 @@ public class Controller implements Initializable{
     public void delete() {
         putToUndo();
         LinkedList<GraphicElement> elements = canvas.getSelectedElements();
-        for(GraphicElement element : elements) {
+        for (GraphicElement element : elements) {
             if (element != null) {
                 graph.deleteElement(element);
             }
@@ -267,20 +269,19 @@ public class Controller implements Initializable{
 
     public void change() {
         putToUndo();
-        if(colorPicker.getValue() != null)
+        if (colorPicker.getValue() != null)
             changeColor();
-        if(sizeChooser.getValue() != null)
+        if (sizeChooser.getValue() != null)
             changeSize();
     }
 
     public void changeColor() {
-        if(graph == null || changeType.getValue() == null)
+        if (graph == null || changeType.getValue() == null)
             return;
-        for(GraphicElement element : canvas.getSelectedElements()) {
+        for (GraphicElement element : canvas.getSelectedElements()) {
             if (changeType.getValue().toString().equals("Element")) {
                 element.setColor(colorPicker.getValue());
-            }
-            else if(element instanceof Vertex) {
+            } else if (element instanceof Vertex) {
                 ((Vertex) element).setFontColor(colorPicker.getValue());
             }
         }
@@ -288,7 +289,7 @@ public class Controller implements Initializable{
     }
 
     public void changeSize() {
-        if(graph == null || changeType.getValue() == null)
+        if (graph == null || changeType.getValue() == null)
             return;
 
         String sizePercentage = sizeChooser.getValue().toString();
@@ -310,12 +311,12 @@ public class Controller implements Initializable{
             case "200%":
                 alpha = 2;
                 break;
-                default:
-                    alpha = 1;
-                    break;
+            default:
+                alpha = 1;
+                break;
         }
 
-        for(GraphicElement element : canvas.getSelectedElements()) {
+        for (GraphicElement element : canvas.getSelectedElements()) {
             if (element instanceof Vertex) {
                 if (changeType.getValue().toString().equals("Element")) {
                     ((Vertex) element).setRadius(((Vertex) element).getRadius() * alpha);
@@ -328,7 +329,7 @@ public class Controller implements Initializable{
     }
 
     public void shortestPath() {
-        if(canvas.getSelectedElements().size() != 2) {
+        if (canvas.getSelectedElements().size() != 2) {
             path.setText("Nevalidan broj cvorova.");
             return;
         }
@@ -337,13 +338,13 @@ public class Controller implements Initializable{
         Vertex target = (Vertex) canvas.getSelectedElements().get(1);
         LinkedList<Vertex> nodes = graph.shortestPath(source, target);
 
-        if(nodes == null) {
+        if (nodes == null) {
             path.setText("Nedostizni cvorovi. ");
             return;
         }
 
         path.setText("Shortest path: " + nodes.size() + "\n");
-        for(Vertex v : nodes) {
+        for (Vertex v : nodes) {
             path.appendText(v.getId());
             path.appendText("\n");
         }
@@ -358,8 +359,8 @@ public class Controller implements Initializable{
         numEdges.setText(Integer.toString(graph.numOfEdges()));
     }
 
-    public void  showLabels() {
-        if(graph == null)
+    public void showLabels() {
+        if (graph == null)
             return;
         boolean checked = checkLabels.isSelected();
         graph.showLabels(checked);
@@ -369,7 +370,7 @@ public class Controller implements Initializable{
     public void createEdge() {
         putToUndo();
         LinkedList<GraphicElement> selected = canvas.getSelectedElements();
-        if(selected.size() != 2)
+        if (selected.size() != 2)
             return;
         Vertex source = (Vertex) selected.get(0);
         Vertex target = (Vertex) selected.get(1);
@@ -402,7 +403,7 @@ public class Controller implements Initializable{
     }
 
     private void undoRedo(Stack<Graph> pushStack, Stack<Graph> popStack) {
-        if(popStack.size() == 0)
+        if (popStack.size() == 0)
             return;
         Graph oldGraph = graph;
 
@@ -422,7 +423,7 @@ public class Controller implements Initializable{
         undoStack.push(cloneGraph);
     }
 
-    public void nodeColorFormatting(){
+    public void nodeColorFormatting() {
         Color maxColor = nodeFormattingColorPicker.getValue();
         graph.setColorsByDegree(maxColor, Graph.ChangeType.VERTEX_CHANGE);
         canvas.repaint();
@@ -433,7 +434,9 @@ public class Controller implements Initializable{
         try {
             minSize = Double.parseDouble(nodeMinSize.getText());
             maxSize = Double.parseDouble(nodeMaxSize.getText());
-        } catch (NumberFormatException e) { return; }
+        } catch (NumberFormatException e) {
+            return;
+        }
         graph.setSizeByDegree(minSize, maxSize, Graph.ChangeType.VERTEX_CHANGE);
         canvas.repaint();
     }
@@ -449,7 +452,9 @@ public class Controller implements Initializable{
         try {
             minSize = Double.parseDouble(labelMinSize.getText());
             maxSize = Double.parseDouble(labelMaxSize.getText());
-        } catch (NumberFormatException e) { return; }
+        } catch (NumberFormatException e) {
+            return;
+        }
         graph.setSizeByDegree(minSize, maxSize, Graph.ChangeType.LABEL_CHANGE);
         canvas.repaint();
     }

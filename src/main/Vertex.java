@@ -126,7 +126,7 @@ public class Vertex extends GraphicElement implements Cloneable {
     public Vertex clone() {
         Vertex vertex = null;
         try {
-            vertex =  (Vertex) super.clone();
+            vertex = (Vertex) super.clone();
             vertex.setSelected(false);
         } catch (CloneNotSupportedException e) {
         }

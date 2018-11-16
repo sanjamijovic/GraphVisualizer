@@ -16,7 +16,9 @@ public class Graph implements Cloneable {
 
     private double lastZoomX, lastZoomY;
 
-    enum ChangeType { VERTEX_CHANGE, LABEL_CHANGE };
+    enum ChangeType {VERTEX_CHANGE, LABEL_CHANGE}
+
+    ;
 
     public Graph() {
         edges = new HashSet<>();
@@ -67,20 +69,20 @@ public class Graph implements Cloneable {
         } catch (CloneNotSupportedException e) {
         }
         g.vertices = new HashMap<>();
-        for(Vertex v : vertices.values()) {
+        for (Vertex v : vertices.values()) {
             g.vertices.put(v.getId(), v.clone());
         }
         g.edges = new HashSet<>();
-        for(Edge e : edges) {
+        for (Edge e : edges) {
             Edge newEdge = new Edge(g.getVertex(e.getSource().getId()), g.getVertex(e.getTarget().getId()), e.getLabel());
             newEdge.setColor(e.getColor());
             g.edges.add(newEdge);
         }
-        return  g;
+        return g;
     }
 
     public void paint(Canvas c) {
-        for(Edge e : edges)
+        for (Edge e : edges)
             e.paint(c);
         for (Vertex v : vertices.values())
             v.paint(c);
@@ -104,7 +106,7 @@ public class Graph implements Cloneable {
 
 
     private void zoom(double x, double y, double zoomFactor) {
-        for(Vertex v : vertices.values()) {
+        for (Vertex v : vertices.values()) {
             v.setX((v.getX() - x) * zoomFactor + x);
             v.setY((v.getY() - y) * zoomFactor + y);
             v.setRadius(v.getRadius() * zoomFactor);
@@ -128,13 +130,13 @@ public class Graph implements Cloneable {
 
     public void moveRelativeTo(Graph other) {
         Vertex first = null, second = null;
-        for(Vertex vertex : other.getVertices().values()) {
-            if(getVertex(vertex.getId()) != null) {
+        for (Vertex vertex : other.getVertices().values()) {
+            if (getVertex(vertex.getId()) != null) {
                 first = getVertex(vertex.getId()); // this
                 second = vertex; // other
             }
         }
-        if(first == null)
+        if (first == null)
             return;
         double dx = second.getX() - first.getX();
         double dy = second.getY() - first.getY();
@@ -143,7 +145,7 @@ public class Graph implements Cloneable {
     }
 
     private void move(double dx, double dy) {
-        for(Vertex vertex : vertices.values()) {
+        for (Vertex vertex : vertices.values()) {
             vertex.setX(vertex.getX() + dx);
             vertex.setY(vertex.getY() + dy);
         }
@@ -151,21 +153,20 @@ public class Graph implements Cloneable {
     }
 
     public GraphicElement getElement(double x, double y) {
-        for(Vertex v : vertices.values())
-            if(v.hasInside(x, y))
+        for (Vertex v : vertices.values())
+            if (v.hasInside(x, y))
                 return v;
-        for(Edge e : edges)
-            if(e.hasInside(x, y))
+        for (Edge e : edges)
+            if (e.hasInside(x, y))
                 return e;
         return null;
     }
 
     public void deleteElement(GraphicElement e) {
-        if(e instanceof Vertex) {
+        if (e instanceof Vertex) {
             vertices.remove(((Vertex) e).getId());
             edges.removeIf(edge -> edge.getSource().equals(e) || edge.getTarget().equals(e));
-        }
-        else
+        } else
             edges.remove(e);
     }
 
@@ -177,7 +178,7 @@ public class Graph implements Cloneable {
         LinkedList<Vertex> vertexQueue = new LinkedList<>();
         HashSet<Vertex> visited = new HashSet<>();
 
-        for(Vertex vertex : vertices.values()) {
+        for (Vertex vertex : vertices.values()) {
             predecessors.put(vertex, null);
         }
 
@@ -187,12 +188,12 @@ public class Graph implements Cloneable {
         while (!vertexQueue.isEmpty()) {
             Vertex vertex = vertexQueue.removeFirst();
 
-            for(Vertex other : nextVertices(vertex)) {
-                if(!visited.contains(other)) {
+            for (Vertex other : nextVertices(vertex)) {
+                if (!visited.contains(other)) {
                     visited.add(other);
                     vertexQueue.add(other);
                     predecessors.put(other, vertex);
-                    if(other == target)
+                    if (other == target)
                         return calculatePath(source, target, predecessors);
                 }
             }
@@ -206,7 +207,7 @@ public class Graph implements Cloneable {
         LinkedList<Vertex> nodesInPath = new LinkedList<>();
 
         while (current != source) {
-            if(current == null)
+            if (current == null)
                 return null;
             nodesInPath.addFirst(current);
             current = predecessors.get(current);
@@ -218,10 +219,10 @@ public class Graph implements Cloneable {
 
     private LinkedList<Vertex> nextVertices(Vertex v) {
         LinkedList<Vertex> nextVertices = new LinkedList<>();
-        for(Edge edge : edges) {
-            if(edge.getSource() == v)
+        for (Edge edge : edges) {
+            if (edge.getSource() == v)
                 nextVertices.add(edge.getTarget());
-            else if(edge.getTarget() == v)
+            else if (edge.getTarget() == v)
                 nextVertices.add(edge.getSource());
         }
 
@@ -229,13 +230,13 @@ public class Graph implements Cloneable {
     }
 
     public void showLabels(boolean labels) {
-        for(Vertex v : vertices.values())
+        for (Vertex v : vertices.values())
             v.setShowLabels(labels);
     }
 
     public HashMap<Vertex, Integer> findDegrees() {
         HashMap<Vertex, Integer> degrees = new HashMap<>();
-        for(Edge edge : edges) {
+        for (Edge edge : edges) {
             degrees.put(edge.getSource(), degrees.getOrDefault(edge.getSource(), 0) + 1);
             degrees.put(edge.getTarget(), degrees.getOrDefault(edge.getTarget(), 0) + 1);
         }
@@ -247,10 +248,10 @@ public class Graph implements Cloneable {
         int maxDegree = Collections.max(degrees.values());
         double minLight = maxColor.getBrightness();
 
-        for(Vertex vertex : vertices.values()) {
+        for (Vertex vertex : vertices.values()) {
             int degree = degrees.getOrDefault(vertex, 0);
             double light = minLight + (1 - minLight) * (maxDegree - degree) / maxDegree;
-            if(type == ChangeType.VERTEX_CHANGE)
+            if (type == ChangeType.VERTEX_CHANGE)
                 vertex.setColor(maxColor.deriveColor(0, 1, light / minLight, 1));
             else
                 vertex.setFontColor(maxColor.deriveColor(0, 1, light / minLight, 1));
@@ -261,10 +262,10 @@ public class Graph implements Cloneable {
         HashMap<Vertex, Integer> degrees = findDegrees();
         int maxDegree = Collections.max(degrees.values());
 
-        for(Vertex vertex : vertices.values()) {
+        for (Vertex vertex : vertices.values()) {
             int degree = degrees.getOrDefault(vertex, 0);
             double size = (maxSize - minSize) * degree / maxDegree + minSize;
-            if(type == ChangeType.VERTEX_CHANGE)
+            if (type == ChangeType.VERTEX_CHANGE)
                 vertex.setRadius(size);
             else
                 vertex.setFontSize(size);

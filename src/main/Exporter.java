@@ -86,8 +86,8 @@ public class Exporter {
         }
     }
 
-    private void makeVertices(Element verticesElement){
-        for(Vertex vertex : graph.getVertices().values()) {
+    private void makeVertices(Element verticesElement) {
+        for (Vertex vertex : graph.getVertices().values()) {
             // vertex element
             Element vertexElement = doc.createElement("vertex");
 

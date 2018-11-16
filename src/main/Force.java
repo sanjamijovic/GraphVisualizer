@@ -6,5 +6,6 @@ public abstract class Force {
     public Force(double coefficient) {
         this.coefficient = coefficient;
     }
+
     abstract void apply(Graph graph, Vertex first, Vertex second);
 }

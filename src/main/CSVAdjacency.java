@@ -15,7 +15,7 @@ public class CSVAdjacency extends Parser {
                 String[] tokens = line.split(";");
 
                 Vertex src, dst;
-                if((src = graph.getVertex(tokens[0])) == null)
+                if ((src = graph.getVertex(tokens[0])) == null)
                     graph.addVertex(src = new Vertex(tokens[0]));
 
                 for (String token : tokens) {
@@ -28,8 +28,7 @@ public class CSVAdjacency extends Parser {
                 }
 
             }
-        }
-        finally {
+        } finally {
             br.close();
         }
 

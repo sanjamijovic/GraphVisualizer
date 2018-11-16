@@ -13,11 +13,11 @@ public class MainCanvas extends Canvas {
     private double oldMouseX, oldMouseY;
 
     public MainCanvas() {
-        widthProperty().addListener(e->repaint());
-        heightProperty().addListener(e->repaint());
+        widthProperty().addListener(e -> repaint());
+        heightProperty().addListener(e -> repaint());
         setOnScroll(e -> {
-            if(graph != null) {
-                if(e.getDeltaY() > 0)
+            if (graph != null) {
+                if (e.getDeltaY() > 0)
                     graph.zoomIn(e.getX(), e.getY());
                 else
                     graph.zoomOut(e.getX(), e.getY());
@@ -29,11 +29,11 @@ public class MainCanvas extends Canvas {
             oldMouseX = e.getX();
             oldMouseY = e.getY();
 
-            if(graph == null)
+            if (graph == null)
                 return;
             GraphicElement selectedElement = graph.getElement(e.getX(), e.getY());
 
-            if(selectedElement != null && selectedElements.contains(selectedElement)) {
+            if (selectedElement != null && selectedElements.contains(selectedElement)) {
                 return;
             } else if (selectedElement != null) {
                 selectElement(selectedElement);
@@ -47,12 +47,12 @@ public class MainCanvas extends Canvas {
         });
 
         setOnMouseDragged(e -> {
-            if(graph == null || selectedElements.size() == 0)
+            if (graph == null || selectedElements.size() == 0)
                 return;
             double dx = e.getX() - oldMouseX;
             double dy = e.getY() - oldMouseY;
 
-            for(GraphicElement element : selectedElements) {
+            for (GraphicElement element : selectedElements) {
                 if (element instanceof Vertex) {
                     ((Vertex) element).setX(((Vertex) element).getX() + dx);
                     ((Vertex) element).setY(((Vertex) element).getY() + dy);
@@ -68,7 +68,7 @@ public class MainCanvas extends Canvas {
     }
 
     public void paint() {
-        if(graph != null)
+        if (graph != null)
             graph.paint(this);
     }
 
@@ -80,7 +80,7 @@ public class MainCanvas extends Canvas {
     void setGraph(Graph graph, boolean toInitialize, boolean showLabels) {
         this.graph = graph;
         graph.showLabels(showLabels);
-        if(toInitialize)
+        if (toInitialize)
             initializeGraphLayout();
     }
 
@@ -95,14 +95,14 @@ public class MainCanvas extends Canvas {
     }
 
     private void initializeGraphLayout() {
-        if(graph == null)
+        if (graph == null)
             return;
         double limitLowX = getWidth() / 2 - 0.4 * getHeight();
         double limitHighX = getWidth() / 2 + 0.4 * getHeight();
         double limitLowY = getHeight() / 2 - 0.4 * getHeight();
         double limitHighY = getHeight() / 2 + 0.4 * getHeight();
 
-        for(Vertex v : graph.getVertices().values()) {
+        for (Vertex v : graph.getVertices().values()) {
             double x = limitLowX + (limitHighX - limitLowX) * Math.random();
             double y = limitLowY + (limitHighY - limitLowY) * Math.random();
             v.setX(x);
@@ -124,20 +124,20 @@ public class MainCanvas extends Canvas {
     }
 
     public void selectAll() {
-        if(graph == null)
+        if (graph == null)
             return;
-        if(selectedElements.size() != 0)
+        if (selectedElements.size() != 0)
             selectedElements.clear();
-        for(Vertex v : graph.getVertices().values())
+        for (Vertex v : graph.getVertices().values())
             selectElement(v);
-        for(Edge e : graph.getEdges())
+        for (Edge e : graph.getEdges())
             selectElement(e);
         selectedItem.setText("Whole graph selected");
         repaint();
     }
 
     public void deselectAll() {
-        for(GraphicElement element : selectedElements)
+        for (GraphicElement element : selectedElements)
             element.setSelected(false);
         selectedItem.setText("");
         selectedElements.clear();

@@ -27,8 +27,7 @@ public class CSVEdges extends Parser {
                     graph.addVertex(dst = new Vertex(m.group(2)));
                 graph.addEdge(new Edge(src, dst));
             }
-        }
-        finally {
+        } finally {
 
             br.close();
         }

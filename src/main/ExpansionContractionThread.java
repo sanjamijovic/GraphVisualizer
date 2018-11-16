@@ -17,7 +17,7 @@ public class ExpansionContractionThread extends AlgorithmThread {
     public void run() {
         Iterator iterator = graph.getVertices().values().iterator();
         while (!interrupted()) {
-            if(iterator.hasNext()) {
+            if (iterator.hasNext()) {
                 Vertex v = (Vertex) iterator.next();
                 v.setX((v.getX() - relativeToX) * coefficient + relativeToX);
                 v.setY((v.getY() - relativeToY) * coefficient + relativeToY);

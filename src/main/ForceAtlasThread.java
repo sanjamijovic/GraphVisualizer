@@ -22,7 +22,7 @@ public class ForceAtlasThread extends AlgorithmThread {
         List<Edge> edges = new LinkedList<>(graph.getEdges());
 
         HashMap<Vertex, Integer> degrees = graph.findDegrees();
-        for(Vertex vertex : vertices)
+        for (Vertex vertex : vertices)
             vertex.getDisplacement().degree = degrees.getOrDefault(vertex, 0);
 
         try {
@@ -41,7 +41,7 @@ public class ForceAtlasThread extends AlgorithmThread {
                         return;
                 }
 
-                for(Vertex vertex : vertices) {
+                for (Vertex vertex : vertices) {
                     Displacement displacement = vertex.getDisplacement();
                     double dist = Math.pow(displacement.dx - displacement.oldDx, 2) +
                             Math.pow(displacement.dy - displacement.oldDy, 2);
@@ -61,6 +61,7 @@ public class ForceAtlasThread extends AlgorithmThread {
                 sleep(5);
             }
 
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
     }
 }

@@ -15,7 +15,7 @@ public class RepulsionForce extends Force {
         Displacement displacementSecond = second.getDisplacement();
 
         double k;
-        if(distance > 0) {
+        if (distance > 0) {
 
             k = coefficient * (displacementFirst.degree + 1) * (displacementSecond.degree + 1) / distance / distance;
             double deltaX, deltaY;
@@ -24,10 +24,9 @@ public class RepulsionForce extends Force {
 
             displacementFirst.dx += deltaX;
             displacementSecond.dx -= deltaX;
-            displacementFirst.dy +=deltaY;
+            displacementFirst.dy += deltaY;
             displacementSecond.dy -= deltaY;
-        }
-        else {
+        } else {
             k = 100 * coefficient * (displacementFirst.degree + 1) * (displacementSecond.degree + 1);
         }
 
