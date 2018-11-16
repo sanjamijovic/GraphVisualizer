@@ -1,5 +1,6 @@
-package main;
+package graphvisualizer.graph;
 
+import graphvisualizer.ui.GraphicElement;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
@@ -16,9 +17,7 @@ public class Graph implements Cloneable {
 
     private double lastZoomX, lastZoomY;
 
-    enum ChangeType {VERTEX_CHANGE, LABEL_CHANGE}
-
-    ;
+    public enum ChangeType {VERTEX_CHANGE, LABEL_CHANGE}
 
     public Graph() {
         edges = new HashSet<>();
@@ -62,7 +61,7 @@ public class Graph implements Cloneable {
     }
 
     @Override
-    protected Object clone() {
+    public Object clone() {
         Graph g = null;
         try {
             g = (Graph) super.clone();

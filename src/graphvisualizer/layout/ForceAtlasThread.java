@@ -1,5 +1,9 @@
-package main;
+package graphvisualizer.layout;
 
+import graphvisualizer.graph.Edge;
+import graphvisualizer.graph.Graph;
+import graphvisualizer.graph.Vertex;
+import graphvisualizer.ui.MainCanvas;
 import javafx.application.Platform;
 
 import java.util.HashMap;

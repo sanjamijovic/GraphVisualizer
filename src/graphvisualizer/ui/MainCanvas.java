@@ -1,5 +1,8 @@
-package main;
+package graphvisualizer.ui;
 
+import graphvisualizer.graph.Edge;
+import graphvisualizer.graph.Graph;
+import graphvisualizer.graph.Vertex;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.TextArea;
 

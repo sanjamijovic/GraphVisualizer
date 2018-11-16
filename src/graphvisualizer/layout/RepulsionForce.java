@@ -1,4 +1,7 @@
-package main;
+package graphvisualizer.layout;
+
+import graphvisualizer.graph.Graph;
+import graphvisualizer.graph.Vertex;
 
 public class RepulsionForce extends Force {
 

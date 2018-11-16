@@ -1,6 +1,8 @@
-package main;
+package graphvisualizer.graph;
 
 
+import graphvisualizer.layout.Displacement;
+import graphvisualizer.ui.GraphicElement;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

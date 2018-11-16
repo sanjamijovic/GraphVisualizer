@@ -1,4 +1,8 @@
-package main;
+package graphvisualizer.parser;
+
+import graphvisualizer.graph.Edge;
+import graphvisualizer.graph.Graph;
+import graphvisualizer.graph.Vertex;
 
 import java.io.*;
 

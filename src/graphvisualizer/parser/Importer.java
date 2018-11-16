@@ -1,5 +1,8 @@
-package main;
+package graphvisualizer.parser;
 
+import graphvisualizer.graph.Edge;
+import graphvisualizer.graph.Graph;
+import graphvisualizer.graph.Vertex;
 import javafx.scene.paint.Color;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

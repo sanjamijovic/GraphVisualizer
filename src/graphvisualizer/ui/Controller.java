@@ -1,5 +1,12 @@
-package main;
+package graphvisualizer.ui;
 
+import graphvisualizer.exporter.Exporter;
+import graphvisualizer.graph.Edge;
+import graphvisualizer.graph.Graph;
+import graphvisualizer.graph.Vertex;
+import graphvisualizer.layout.ExpansionContractionThread;
+import graphvisualizer.layout.ForceAtlasThread;
+import graphvisualizer.parser.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

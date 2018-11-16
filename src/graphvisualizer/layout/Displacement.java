@@ -1,4 +1,4 @@
-package main;
+package graphvisualizer.layout;
 
 public class Displacement {
     public double dx;

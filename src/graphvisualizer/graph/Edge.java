@@ -1,6 +1,7 @@
-package main;
+package graphvisualizer.graph;
 
 
+import graphvisualizer.ui.GraphicElement;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 

@@ -1,4 +1,4 @@
-package main;
+package graphvisualizer.ui;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;

@@ -1,5 +1,8 @@
-package main;
+package graphvisualizer.layout;
 
+import graphvisualizer.graph.Graph;
+import graphvisualizer.ui.MainCanvas;
+import graphvisualizer.graph.Vertex;
 import javafx.application.Platform;
 
 import java.util.Iterator;
